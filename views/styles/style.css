@@ -1,0 +1,421 @@
+/* import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Aleo:wght@400;700&display=swap');
+
+/* Elementos globais */
+* {
+    font-family: "Aleo", serif;
+    font-optical-sizing: auto;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+}
+
+main {
+    width: 100%;
+    min-height: 100vh;
+    background: url('../views/pictures/fundo.svg') no-repeat center center/cover;
+    /* centralizar o .container */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-1 {
+    position: relative; /* Permite elemento filho em posição absoluta */
+    /* centraliza o conteúdo */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    min-height: 70vh;
+    width: 65%;
+    padding: 20px;
+    border: 3px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+form {
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #007977;
+    color: #FFF;
+    text-decoration: none;
+    text-align: center;
+    border: none;
+    margin-bottom: 30px;
+    border-radius: 999px;
+    width: 50%;
+    height: 60px;
+    font-size: x-large;
+    transition: background-color 0.3s ease;
+}
+
+.btn:visited {
+    color: #FFF;
+}
+
+.btn:hover {
+    background-color: #095a59;
+    cursor: pointer;
+}
+
+.ajuda {
+  color: #007977;
+  text-decoration: none;
+}
+
+.ajuda:visited {
+  color: #0c9492;
+}
+
+img {
+    width: 200px;
+    height: auto;
+}
+
+strong {
+    color: #0F6664;
+    font-size: large;
+}
+
+label {
+    margin-bottom: 5px;
+}
+
+input {
+    width: 50%;
+    height: 50px;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: large;
+    margin-bottom: 20px;
+}
+
+.btnEntrar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #007977;
+    color: #FFF;
+    text-decoration: none;
+    text-align: center;
+    border: none;
+    border-radius: 999px;
+    width: 30%;
+    height: 60px;
+    font-size: x-large;
+    transition: background-color 0.3s ease;
+}
+
+.botaoVoltar {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    text-decoration: none;
+    color: #007977;
+    font-weight: bold;
+    background: rgba(255,255,255,0.8);
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.btnEntrar:hover {
+    background-color: #095a59;
+    cursor: pointer;
+}
+
+/* css da parte do cadastro de paciente e médico */
+
+.form-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;   /* duas colunas iguais */
+    gap: 20px 30px;                   /* espaçamento entre colunas e linhas */
+    align-items: start; 
+}
+
+.coluna {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;                        /* espaço entre cada label‑input */
+}
+
+.coluna input,
+.coluna select {
+    width: 100%;                      /* ocupam toda a largura da coluna */
+}
+
+select {
+    width: 50%;
+    height: 50px;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: large;
+}
+
+form p {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --teal:       #007977;
+  --teal-dark:  #127a68;
+  --teal-light: #e6f5f2;
+  --teal-mid:   #c2e8e1;
+  --white:      #ffffff;
+  --border:     #b0d8d0;
+}
+
+body {
+  font-family: 'Aleo', sans-serif;
+  background: #f0f9f7;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Top bar ── */
+.topbar {
+  background: var(--teal);
+  padding: 2px 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topbar-icon {
+  color: var(--white);
+  font-size: 22px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.logo-img {
+  height: 140px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* ── Sub-header ── */
+.subheader {
+  border-bottom: 2px solid var(--teal-mid);
+  padding: 14px 40px;
+  display: flex;
+  align-items: center;
+  background: var(--white);
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--teal);
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.subheader-title {
+  flex: 1;
+  text-align: center;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--teal);
+}
+
+.subheader-spacer {
+  width: 70px;
+}
+
+/* ── Main content ── */
+.content {
+  flex: 1;
+  padding: 36px 48px 48px;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 300px;
+}
+
+/* ── Medication table ── */
+.med-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid var(--teal);
+  box-shadow: var(--shadow);
+}
+ 
+.med-table thead tr th {
+  background: var(--teal);
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 800;
+  padding: 14px 16px;
+  text-align: center;
+  border-right: 1.5px solid rgba(255,255,255,0.3);
+}
+ 
+.med-table thead tr th:first-child {
+  text-align: left;
+  padding-left: 24px;
+}
+
+.med-table thead tr th:last-child {
+  border-right: none;
+}
+ 
+.med-table tbody tr {
+  transition: background .15s;
+}
+ 
+.med-table tbody tr:nth-child(odd) {
+  background: var(--white);
+}
+ 
+.med-table tbody tr:nth-child(even) {
+  background: var(--teal-light);
+}
+ 
+.med-table tbody tr:hover {
+  background: var(--teal-mid);
+}
+ 
+.med-table tbody tr td {
+  font-size: 14px;
+  color: var(--text);
+  padding: 13px 16px;
+  border-bottom: 1.5px solid var(--border);
+  border-right: 1.5px solid var(--border);
+  vertical-align: middle;
+}
+ 
+.med-table tbody tr td:last-child {
+  border-right: none;
+}
+ 
+.med-table tbody tr:last-child td {
+  border-bottom: none;
+}
+ 
+.med-table tbody tr td:first-child {
+  font-weight: 700;
+  padding-left: 24px;
+}
+ 
+.med-table tbody tr td:not(:first-child) {
+  text-align: center;
+}
+
+/* ── Bottom section ── */
+.bottom-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* ── Cards ── */
+.cards {
+  display: flex;
+  gap: 16px;
+}
+
+.card {
+  background: var(--teal);
+  border-radius: 18px;
+  padding: 22px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  width: 140px;
+  min-height: 130px;
+  transition: background .2s, transform .15s, box-shadow .15s;
+  box-shadow: var(--shadow);
+}
+
+.card:hover {
+  background: var(--teal-dark);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(26, 155, 132, .3);
+}
+
+.card:active {
+  transform: translateY(0);
+}
+
+.card i {
+  font-size: 32px;
+  color: var(--white);
+}
+
+.card-label {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--white);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.card.active {
+  background: var(--teal-dark);
+  outline: 2.5px solid rgba(255, 255, 255, .5);
+}
+
+/* ── Card number ── */
+.card-number {
+  background: var(--teal);
+  border-radius: 14px;
+  padding: 14px 24px;
+  text-align: right;
+}
+
+.card-number p {
+  color: rgba(255, 255, 255, .75);
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.card-number span {
+  color: var(--white);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.btnMenu {
+  width: 20vw;
+  height: 20vh;
+}

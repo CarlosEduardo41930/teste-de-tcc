@@ -1,0 +1,214 @@
+@import url('https://fonts.googleapis.com/css2?family=Aleo:wght@400;700&display=swap');
+
+/* Elementos globais */
+* {
+    font-family: "Aleo", serif;
+    font-optical-sizing: auto;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background-color: #f4f4f4;
+}
+
+header {
+    width: 100%;
+    height: 15vh;
+    background-color: #007977;
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 15vh;
+    width: auto;
+}
+
+.btnCasa {
+    width: 55px;
+    height: auto;
+}
+
+
+/* menu hamburger */
+
+.menu-icon {
+    width: 35px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.menu-icon span {
+    display: block;
+    height: 4px;
+    background: white;
+    margin: 6px 0;
+    border-radius: 2px;
+}
+
+/* Hover */
+.menu-icon:hover span {
+    background: #ccc;
+}
+
+/* sidebar */
+
+#sidebar {
+    position: fixed;
+    top: 15vh;
+    right: -0; /* responsivo */
+    width: 25vw;
+    height: calc(100vh - 15vh);
+    background: #007977;
+    padding: 5px;
+    transition: transform 0.3s ease;
+
+    transform: translateX(100%); /* escondido */
+    
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    box-shadow: -4px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Quando aberto */
+#sidebar.active {
+    transform: translateX(0); /* aparece */
+}
+
+#sidebar a {
+    display: block;
+    text-decoration: none;
+    margin: 15px 0;
+    font-size: 18px;
+}
+
+#sidebar h1, h3 {
+    color: #007977;
+}
+
+.contSidebar {
+    width: 100%;
+    min-height: 10vh;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.config {
+    color: black;
+}
+
+.opcao {
+    color: white;
+}
+
+
+/* css do conteúdo principal */
+
+main {
+    height: calc(100vh - 15vh);
+}
+
+.contMain {
+    display: grid;
+    height: 100%;
+    grid-template-rows: 2fr 1fr;
+}
+
+.parte {
+    padding: 40px;
+}
+
+.cardSaude {
+    width: 100%;
+    min-height: 100%;
+    border-radius: 30px;
+    background-color: #007977;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.titulo {
+    width: 100%;
+    height: 6vh;
+    background-color: #A30000;
+    border-radius: 30px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contTexto {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    height: 100%;
+}
+
+.coluna {
+    height: 100%;
+    padding: 20px 100px;
+}
+
+.campo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.campo p {
+    font-size: larger;
+}
+
+.input {
+    padding: 5px;
+}
+
+.hidden {
+    display: none;
+}
+
+.texto {
+    color: white;
+}
+
+.btnMenu {
+  width: 100%;
+  height: 15vh;
+  border-radius: 30px;
+  border: none;
+  background-color: #007977;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  font-style: bold;
+  color: white;
+  font-size: large;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btnMenu:hover {
+    background-color: #006361;
+}
+
+.gridBtn {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
