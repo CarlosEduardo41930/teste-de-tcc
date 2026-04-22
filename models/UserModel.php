@@ -282,3 +282,29 @@ return $id;
        $_SESSION['erro'][] = "Erro ao cadastrar arquivo: " . $e->getMessage();
     }
 }
+
+function getinformacaoPaciente($pdo, $id){
+    $sql = "SELECT use.nome as nome FROM paciente paci INNER JOIN usuarios use on paci.fk_usuario_id = use.id WHERE paci.id = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$id]);
+    return $stmt->fetch();
+}
+
+function updateArquivo($pdo, $id, $caminho){
+    if (!$id || !is_numeric($id)) {
+        $_SESSION['erro'][] = "ID inválido.";
+        exit;
+    }
+    try{
+        $sql = "UPDATE arquivos SET caminho = ? WHERE  id_arquivos = ? ";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$caminho, $id]);
+    if ($stmt->rowCount() === 0) {
+        throw new Exception("Acesso negado ou aula não encontrada.");
+    }
+    return true;
+    }catch(Exception $e){
+        $_SESSION['erro'][] = $e->getMessage();
+        return false;
+    }
+}

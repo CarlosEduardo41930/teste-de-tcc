@@ -11,7 +11,7 @@ declare(strict_types=1);
  * - o nome do arquivo seja seguro
  * - permissões seguras sejam aplicadas
  */
-class UploadService
+class UploadService 
 {
     private const ALLOWED_MIME_TYPES = ['application/pdf'];
     private const ALLOWED_EXTENSION  = 'pdf';

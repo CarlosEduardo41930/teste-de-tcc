@@ -8,6 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 require __DIR__ . "/../models/UserModel.php";
 require __DIR__ . '/../config/conexao.php';
 require __DIR__ . '/security.php';
+require_once __DIR__ . '/../servico/chamados/guardar_arquivo.php';
 
 // function verificarConexao(){
 
@@ -142,9 +143,10 @@ function getTelEmergencia()
     }
 }
 
-function showTelEmergencia() {
+function showTelEmergencia()
+{
     global $pdo;
-    
+
     $paciente_id = $_SESSION['id_usuario'];
     $telefoneDeEmergencia = getTelEmergenciaDataBase($pdo, $paciente_id);
 }
@@ -153,52 +155,58 @@ function receitas($id)
 {
     global $pdo;
     return getReceitasMedicas($pdo, $id);
-
 }
 
-function arquivo(){
+function arquivo()
+{
     global $pdo;
     $id = trim($_GET['arquivo']);
     $dados = getArquivo($pdo, $id);
     $arquivo = $dados['caminho'];
 
-// Segurança
-if (!file_exists($arquivo)) {
-    http_response_code(404);
-    die("Arquivo não encontrado.");
+    // Segurança
+    if (!file_exists($arquivo)) {
+        http_response_code(404);
+        die("Arquivo não encontrado.");
+    }
+
+
+    // Cabeçalhos corretos para exibir no navegador
+    header("Content-Type: application/pdf");
+    header("Content-Disposition: inline; filename=\"documento.pdf\"");
+    header("Content-Length: " . filesize($arquivo));
+
+    // Evita bloqueio em iframe
+    header("X-Frame-Options: SAMEORIGIN");
+
+    readfile($arquivo);
+    exit;
 }
 
-
-// Cabeçalhos corretos para exibir no navegador
-header("Content-Type: application/pdf");
-header("Content-Disposition: inline; filename=\"documento.pdf\"");
-header("Content-Length: " . filesize($arquivo));
-
-// Evita bloqueio em iframe
-header("X-Frame-Options: SAMEORIGIN");
-
-readfile($arquivo);
-exit;
-}
-
-function buscarPaciente($item){
+function buscarPaciente($item)
+{
     global $pdo;
-    if(isset($item) || $item !== '' || $item !== null){
+    if (isset($item) || $item !== '' || $item !== null) {
         return getBusca($pdo, $item);
+    }
+    return;
 }
-return;
-}
-function pacienteMedicos($id){
+function pacienteMedicos($id)
+{
     global $pdo;
     return getPacienteMedicos($pdo, $id);
 }
 
-function sessionPaciente(){
+function sessionPaciente()
+{
+    global $pdo;
     $id = $_GET['paciente'] ?? '';
     $_SESSION['id_paciente'] = $id;
+    $_SESSION['nome_paciente'] = getinformacaoPaciente($pdo, $id);
 }
- function uploadArquivo(){
-        global $pdo;
+function uploadArquivoI()
+{
+    global $pdo;
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $nome = sanitizar($_POST['nome'] ?? '', 'nome');
@@ -210,12 +218,26 @@ function sessionPaciente(){
         $medico = $_SESSION['id_usuario'];
         $paciente = $_SESSION['id_paciente'];
 
-        if($nome === '' || $descricao === '' || $data_emissao === '' || $tipo === '' || !isset($_FILES['arquivo'])){
+        if ($nome === '' || $descricao === '' || $data_emissao === '' || $tipo === '' || !isset($_FILES['arquivo'])) {
             $_SESSION['erro'][] = "Preencha todos os campos obrigatórios.";
         }
 
         if (empty($_SESSION['erro'])) {
-            $id =setArquivo($pdo, $nome, $descricao, $data_emissao, $data_validade, $tipo, $status, $medico, $paciente);
+            $id = setArquivo($pdo, $nome, $descricao, $data_emissao, $data_validade, $tipo, $status, $medico, $paciente);
         }
+        $nameArquivo = pathinfo($_FILES['arquivo']['name'] ?? '', PATHINFO_FILENAME);
+        if ($nameArquivo === '') {
+            $nameArquivo = 'documento-medico';
+        }
+        $patientName = explode(' ', trim($_SESSION['nome_paciente']))[0] ?? 'paciente';
+        $uploadService = new UploadService(__DIR__ . '/../documento');
+        $filePath = $uploadService->handleUpload(
+            $_FILES['arquivo'],
+            $patientName,
+            $_SESSION['nome_paciente'],
+            $nameArquivo,
+            $id
+        );
+        
     }
- }
+}
