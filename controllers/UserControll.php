@@ -202,13 +202,15 @@ function sessionPaciente()
     global $pdo;
     $id = $_GET['paciente'] ?? '';
     $_SESSION['id_paciente'] = $id;
-    $_SESSION['nome_paciente'] = getinformacaoPaciente($pdo, $id);
+    $nome = getinformacaoPaciente($pdo, $id);
+    $_SESSION['nome_paciente'] = $nome;
 }
 function uploadArquivoI()
 {
     global $pdo;
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    try{
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $nome = sanitizar($_POST['nome'] ?? '', 'nome');
         $descricao = sanitizar($_POST['descricao'] ?? '', 'texto');
         $data_emissao = trim($_POST['data_emissao']);
@@ -219,9 +221,9 @@ function uploadArquivoI()
         $paciente = $_SESSION['id_paciente'];
 
         if ($nome === '' || $descricao === '' || $data_emissao === '' || $tipo === '' || !isset($_FILES['arquivo'])) {
-            $_SESSION['erro'][] = "Preencha todos os campos obrigatórios.";
+            throw new RuntimeException('Preencha todos os campos obrigatórios.');
         }
-
+        
         if (empty($_SESSION['erro'])) {
             $id = setArquivo($pdo, $nome, $descricao, $data_emissao, $data_validade, $tipo, $status, $medico, $paciente);
         }
@@ -238,6 +240,31 @@ function uploadArquivoI()
             $nameArquivo,
             $id
         );
+
+        $dado = updateArquivo($pdo, $id, $filePath);
+        if($dado){
+            $_SESSION['success'] = 'Documento médico enviado com sucesso.';
+            header('Location: ../views/medPaciente.php');
+            exit(); 
+        }else{
+            throw new RuntimeException('Erro ao atualizar o caminho do arquivo no banco de dados.');
+            exit();
+        }
+        }
         
+    }catch(Throwable $e) {
+
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
+    // Remove o registro criado no banco para não deixar registro órfão.
+    if (isset($id) && is_int($id)) {
+        deleteArquivo($pdo, $id);
+    }
+
+    // Coloca a mensagem de erro na sessão e retorna para a página do médico.
+    $_SESSION['erro'][] = $e->getMessage();
+    header('Location: ../views/pgMedico.php');
+    exit();
     }
 }

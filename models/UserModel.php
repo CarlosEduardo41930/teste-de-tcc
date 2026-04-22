@@ -284,7 +284,7 @@ return $id;
 }
 
 function getinformacaoPaciente($pdo, $id){
-    $sql = "SELECT use.nome as nome FROM paciente paci INNER JOIN usuarios use on paci.fk_usuario_id = use.id WHERE paci.id = ?";
+    $sql = "SELECT usuarios.nome as nome FROM paciente INNER JOIN usuarios on paciente.fk_usuario_id = usuarios.id WHERE paciente.id = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id]);
     return $stmt->fetch();
@@ -304,6 +304,22 @@ function updateArquivo($pdo, $id, $caminho){
     }
     return true;
     }catch(Exception $e){
+        $_SESSION['erro'][] = $e->getMessage();
+        return false;
+    }
+}
+
+function deleteArquivo($pdo, $id){
+    try {
+         $stmt = $pdo->prepare("DELETE FROM arquivos WHERE id_arquivos = ?");
+        $stmt->execute([$id]);
+        $dado = $stmt->fetchColumn();
+
+        if (!$dado) {
+            throw new Exception("Arquivo não encontrado.");
+        }
+        return true;
+    }catch (Exception $e) {
         $_SESSION['erro'][] = $e->getMessage();
         return false;
     }

@@ -11,6 +11,7 @@ require_once './components/UserComponents.php';
     <title>Document</title>
 </head>
 <body>
+    <?php mensagemErro() ?>
     <form method="post" enctype="multipart/form-data">
         <div>
             <label for="nome">Nome: </label>
