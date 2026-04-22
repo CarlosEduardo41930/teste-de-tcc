@@ -15,12 +15,8 @@ class UploadService
         $this->baseUploadDir = rtrim($baseUploadDir, DIRECTORY_SEPARATOR);
     }
 
-    // -------------------------------------------------------------------------
-    // Ponto de entrada principal
-    // -------------------------------------------------------------------------
-
     /**
-     * Processa o upload do arquivo de nota fiscal.
+     * 
      *
      * @param array  $uploadedFile  $_FILES['arquivo']
      * @param string $userFirstName Primeiro nome do usuário
