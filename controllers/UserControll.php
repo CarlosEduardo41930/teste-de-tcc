@@ -162,14 +162,14 @@ function arquivo()
     global $pdo;
     $id = trim($_GET['arquivo']);
     $dados = getArquivo($pdo, $id);
-    $arquivo = $dados['caminho'];
+    $caminhoRelativo = str_replace('\\', '/', $dados['caminho']);
+    $arquivo = realpath(__DIR__ . '/../documento/' . $caminhoRelativo);
 
     // Segurança
-    if (!file_exists($arquivo)) {
+    if (!$arquivo || !file_exists($arquivo)) {
         http_response_code(404);
         die("Arquivo não encontrado.");
     }
-
 
     // Cabeçalhos corretos para exibir no navegador
     header("Content-Type: application/pdf");
@@ -203,68 +203,108 @@ function sessionPaciente()
     $id = $_GET['paciente'] ?? '';
     $_SESSION['id_paciente'] = $id;
     $nome = getinformacaoPaciente($pdo, $id);
-    $_SESSION['nome_paciente'] = $nome;
+    $_SESSION['nome_paciente'] = $nome['nome'] ?? 'paciente';
+}
+function informacaoMedica()
+{
+    global $pdo;
+
+    $usuarioId = (int)($_SESSION['id_usuario'] ?? 0);
+    if (!$usuarioId) {
+        unset($_SESSION['id_medico'], $_SESSION['nome_medico']);
+        return false;
+    }
+
+    $medico = getMedicoIdByUsuarioId($pdo, $_SESSION['id_usuario']);
+    if (!$medico || empty($medico['id'])) {
+        return false;
+    }
+
+    
+
+    return true;
 }
 function uploadArquivoI()
 {
     global $pdo;
 
-    try{
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+        return;
+    }
+
+    try {
         $nome = sanitizar($_POST['nome'] ?? '', 'nome');
         $descricao = sanitizar($_POST['descricao'] ?? '', 'texto');
-        $data_emissao = trim($_POST['data_emissao']);
-        $data_validade = trim($_POST['data_validade']);
-        $tipo = trim($_POST['tipo']);
-        $status = 'ativo';
-        $medico = $_SESSION['id_usuario'];
-        $paciente = $_SESSION['id_paciente'];
+        $data_emissao = trim($_POST['data_emissao'] ?? '');
+        $data_validade = trim($_POST['data_validade'] ?? '');
+        $tipo = trim($_POST['tipo'] ?? '');
+        $usuarioMedicoId = (int)($_SESSION['id_usuario'] ?? 0);
+        $paciente = (int)($_SESSION['id_paciente'] ?? 0);
 
-        if ($nome === '' || $descricao === '' || $data_emissao === '' || $tipo === '' || !isset($_FILES['arquivo'])) {
+        if (!$usuarioMedicoId || !$paciente) {
+            throw new RuntimeException('Sessão inválida. Faça login novamente.');
+        }
+
+        if ($nome === '' || $descricao === '' || $data_emissao === '' || $tipo === '') {
             throw new RuntimeException('Preencha todos os campos obrigatórios.');
         }
-        
-        if (empty($_SESSION['erro'])) {
-            $id = setArquivo($pdo, $nome, $descricao, $data_emissao, $data_validade, $tipo, $status, $medico, $paciente);
+
+        if (!isset($_FILES['arquivo'])) {
+            throw new RuntimeException('Arquivo não enviado.');
         }
+
+        if (empty($_SESSION['id_medico']) && !informacaoMedica()) {
+            throw new RuntimeException('Médico não encontrado no sistema. Faça login novamente.');
+        }
+
+        $medico = (int)($_SESSION['id_medico'] ?? 0);
+        if (!$medico) {
+            throw new RuntimeException('Médico não encontrado no sistema. Faça login novamente.');
+        }
+
+
+        $pdo->beginTransaction();
+
+        $id = setArquivo($pdo, $nome, $descricao, $data_emissao, $data_validade, $tipo, 'ativo', $medico, $paciente);
+        if (!$id) {
+            throw new RuntimeException('Falha ao cadastrar arquivo no banco de dados.');
+        }
+        $id = (int)$id;
+
         $nameArquivo = pathinfo($_FILES['arquivo']['name'] ?? '', PATHINFO_FILENAME);
         if ($nameArquivo === '') {
             $nameArquivo = 'documento-medico';
         }
-        $patientName = explode(' ', trim($_SESSION['nome_paciente']))[0] ?? 'paciente';
+
+        $patientName = explode(' ', trim($_SESSION['nome_paciente'] ?? 'paciente'))[0] ?? 'paciente';
         $uploadService = new UploadService(__DIR__ . '/../documento');
         $filePath = $uploadService->handleUpload(
             $_FILES['arquivo'],
             $patientName,
-            $_SESSION['nome_paciente'],
+            $paciente,
             $nameArquivo,
             $id
         );
 
-        $dado = updateArquivo($pdo, $id, $filePath);
-        if($dado){
-            $_SESSION['success'] = 'Documento médico enviado com sucesso.';
-            header('Location: ../views/medPaciente.php');
-            exit(); 
-        }else{
+
+        if (!updateArquivo($pdo, $id, $filePath)) {
             throw new RuntimeException('Erro ao atualizar o caminho do arquivo no banco de dados.');
-            exit();
         }
+
+        $pdo->commit();
+
+        $_SESSION['success'] = 'Documento médico enviado com sucesso.';
+        header('Location: ../views/medPaciente.php?paciente=' . $_SESSION['id_paciente']);
+        exit();
+    } catch (Throwable $e) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        } elseif (isset($id) && is_int($id)) {
+            deleteArquivo($pdo, $id);
         }
-        
-    }catch(Throwable $e) {
 
-    if ($pdo->inTransaction()) {
-        $pdo->rollBack();
-    }
-    // Remove o registro criado no banco para não deixar registro órfão.
-    if (isset($id) && is_int($id)) {
-        deleteArquivo($pdo, $id);
-    }
-
-    // Coloca a mensagem de erro na sessão e retorna para a página do médico.
-    $_SESSION['erro'][] = $e->getMessage();
-    header('Location: ../views/pgMedico.php');
-    exit();
+        $_SESSION['erro'][] = $e->getMessage();
+        header('Location: ../views/adicionarDocumento.php');
+        exit();
     }
 }

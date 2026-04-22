@@ -1,6 +1,7 @@
 <?php
 require_once '../controllers/UserControll.php';
 require_once './components/UserComponents.php';
+uploadArquivoI();
 
 ?>
 <!DOCTYPE html>
@@ -38,7 +39,7 @@ require_once './components/UserComponents.php';
             <div class="field">
                     <label for="tipo">Tipo de documento</label>
                     <select id="tipo" name="tipo" required>
-                        <option value="receita">Receita</option>
+                        <option value="receitas">Receita</option>
                         <option value="relatorio">Relatório Médico</option>
                         <option value="laudo">Laudo</option>
                     </select>

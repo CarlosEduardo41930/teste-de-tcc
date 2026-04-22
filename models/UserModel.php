@@ -190,19 +190,17 @@ function setTelEmergencia($pdo, $telefone, $paciente_id)
     }
 }
 
-function getTelEmergenciaDataBase($pdo, $paciente_id) { // as outras funções dessa pagina podem seguir os mesmos padrões, apenas mudando os dados do banco e nome de variavel
+function getTelEmergenciaDataBase($pdo, $paciente_id) {
     $sql = "SELECT contato_emergencia FROM paciente WHERE fk_usuario_id = ?";
 
     $stmt = $pdo->prepare($sql);
+    $stmt->execute([$paciente_id]);
+    $telEmergencia = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($stmt->execute([$paciente_id])) {
-       $TelEmergencia = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return $TelEmergencia['contato_emergencia']; // variavel que deve ser usada no front para mostrar o telefone
-    } else {
-        echo "Erro ao adicionar contato";
+    if ($telEmergencia) {
+        return $telEmergencia['contato_emergencia'];
     }
-
+    return null;
 }
 
 function getReceitasMedicas($pdo, $id){
@@ -267,11 +265,31 @@ FROM paciente INNER JOIN usuarios on paciente.fk_usuario_id = usuarios.id
     return $stmt->fetchAll();
 }
 
+function getMedicoIdByUsuarioId($pdo, $usuarioId)
+{
+    $sql = "SELECT medico.id as id, usuarios.nome as nome FROM medico INNER JOIN usuarios on medico.fk_usuario_id = usuarios.id WHERE medico.fk_usuario_id = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$usuarioId]);
+    $medico = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($medico) {
+        $_SESSION['id_medico'] = $medico['id'];
+        $_SESSION['nome_medico'] = $medico['nome'];
+        return $medico;
+    }
+
+    return null;
+}
+
 function setArquivo($pdo, $nome, $descricao, $data_emissao, $data_validade, $tipo, $status, $medico, $paciente){
     try{
-    $sql = "INSERT INTO arquivos (nome, descricao, data_emissao, data_validade, tipo, status, fk_medico_id, fk_paciente_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    if (empty($data_validade)) {
+        $data_validade = $data_emissao;
+    }
+
+    $sql = "INSERT INTO arquivos (nome, caminho, descricao, data_emissao, data_validade, tipo, status, fk_medico_id, fk_paciente_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $pdo->prepare($sql);
-    $sucesso = $stmt->execute([$nome, $descricao, $data_emissao, $data_validade, $tipo, $status, $medico, $paciente]);
+    $sucesso = $stmt->execute([$nome, '', $descricao, $data_emissao, $data_validade, $tipo, $status, $medico, $paciente]);
 if(!$sucesso){
     throw new Exception("Erro ao cadastrar arquivo.");
 }
@@ -280,6 +298,7 @@ return $id;
 
     } catch (Exception $e) {
        $_SESSION['erro'][] = "Erro ao cadastrar arquivo: " . $e->getMessage();
+       return false;
     }
 }
 
@@ -313,9 +332,8 @@ function deleteArquivo($pdo, $id){
     try {
          $stmt = $pdo->prepare("DELETE FROM arquivos WHERE id_arquivos = ?");
         $stmt->execute([$id]);
-        $dado = $stmt->fetchColumn();
 
-        if (!$dado) {
+        if ($stmt->rowCount() === 0) {
             throw new Exception("Arquivo não encontrado.");
         }
         return true;

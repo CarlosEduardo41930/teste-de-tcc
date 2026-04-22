@@ -1,9 +1,9 @@
 <?php
 require_once '../controllers/UserControll.php';
 require_once './components/UserComponents.php';
-//$titulo = ucwords($_GET['tipo']);
+$titulo = ucwords($_GET['tipo']);
 ?>
-<!--  
+ 
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -76,4 +76,3 @@ iframe {
 
 </body>
 </html>
--->

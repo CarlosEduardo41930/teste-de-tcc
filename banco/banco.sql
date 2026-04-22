@@ -68,7 +68,7 @@ CREATE TABLE problema_de_saude (
     ID_problema_de_saude int not null PRIMARY KEY auto_increment,
     nome VARCHAR(100),
     status VARCHAR(50),
-    tipo ENUM('grave','leve'),
+    tipo ENUM('grave','leve','normal','medio'),
     fk_paciente INTEGER NOT NULL,
     fk_medico INTEGER NOT NULL
 );
