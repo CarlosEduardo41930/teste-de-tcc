@@ -267,4 +267,18 @@ FROM paciente INNER JOIN usuarios on paciente.fk_usuario_id = usuarios.id
     return $stmt->fetchAll();
 }
 
+function setArquivo($pdo, $nome, $descricao, $data_emissao, $data_validade, $tipo, $status, $medico, $paciente){
+    try{
+    $sql = "INSERT INTO arquivos (nome, descricao, data_emissao, data_validade, tipo, status, fk_medico_id, fk_paciente_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $pdo->prepare($sql);
+    $sucesso = $stmt->execute([$nome, $descricao, $data_emissao, $data_validade, $tipo, $status, $medico, $paciente]);
+if(!$sucesso){
+    throw new Exception("Erro ao cadastrar arquivo.");
+}
+$id = $pdo->lastInsertId();
+return $id;
 
+    } catch (Exception $e) {
+       $_SESSION['erro'][] = "Erro ao cadastrar arquivo: " . $e->getMessage();
+    }
+}

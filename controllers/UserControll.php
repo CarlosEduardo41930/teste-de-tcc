@@ -197,3 +197,25 @@ function sessionPaciente(){
     $id = $_GET['paciente'] ?? '';
     $_SESSION['id_paciente'] = $id;
 }
+ function uploadArquivo(){
+        global $pdo;
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $nome = sanitizar($_POST['nome'] ?? '', 'nome');
+        $descricao = sanitizar($_POST['descricao'] ?? '', 'texto');
+        $data_emissao = trim($_POST['data_emissao']);
+        $data_validade = trim($_POST['data_validade']);
+        $tipo = trim($_POST['tipo']);
+        $status = 'ativo';
+        $medico = $_SESSION['id_usuario'];
+        $paciente = $_SESSION['id_paciente'];
+
+        if($nome === '' || $descricao === '' || $data_emissao === '' || $tipo === '' || !isset($_FILES['arquivo'])){
+            $_SESSION['erro'][] = "Preencha todos os campos obrigatórios.";
+        }
+
+        if (empty($_SESSION['erro'])) {
+            $id =setArquivo($pdo, $nome, $descricao, $data_emissao, $data_validade, $tipo, $status, $medico, $paciente);
+        }
+    }
+ }
