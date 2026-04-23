@@ -190,7 +190,8 @@ function setTelEmergencia($pdo, $telefone, $paciente_id)
     }
 }
 
-function getTelEmergenciaDataBase($pdo, $paciente_id) {
+function getTelEmergenciaDataBase($pdo, $paciente_id)
+{
     $sql = "SELECT contato_emergencia FROM paciente WHERE fk_usuario_id = ?";
 
     $stmt = $pdo->prepare($sql);
@@ -203,12 +204,13 @@ function getTelEmergenciaDataBase($pdo, $paciente_id) {
     return null;
 }
 
-function getReceitasMedicas($pdo, $id){
-        $sql = "SELECT a.id_arquivos as id, a.descricao as descricao, a.data_emissao as data, usua.nome as medico FROM arquivos a LEFT JOIN medico me ON a.fk_medico_id = me.id LEFT JOIN usuarios usua ON me.fk_usuario_id = usua.id WHERE a.fk_paciente_id = ? and a.tipo = 'receitas' ORDER BY a.data_emissao;";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$id]);
-        return $stmt->fetchAll();
-    }
+function getReceitasMedicas($pdo, $id)
+{
+    $sql = "SELECT a.id_arquivos as id, a.descricao as descricao, a.data_emissao as data, usua.nome as medico FROM arquivos a LEFT JOIN medico me ON a.fk_medico_id = me.id LEFT JOIN usuarios usua ON me.fk_usuario_id = usua.id WHERE a.fk_paciente_id = ? and a.tipo = 'receitas' ORDER BY a.data_emissao;";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$id]);
+    return $stmt->fetchAll();
+}
 
 function getArquivo($pdo, $idArquivo)
 {
@@ -244,9 +246,10 @@ ORDER BY DADOSPACIENTE.nome";
     return $stmt->fetchAll();
 }
 
-function getBusca($pdo, $item){
-$pesquisa = "%$item%";
-    $sql ="SELECT paciente.id as id, usuarios.nome as nome, paciente.data_nascimento as data_nascimento, paciente.numero_de_carteirinha as numero_de_carteirinha,  MAX(CASE
+function getBusca($pdo, $item)
+{
+    $pesquisa = "%$item%";
+    $sql = "SELECT paciente.id as id, usuarios.nome as nome, paciente.data_nascimento as data_nascimento, paciente.numero_de_carteirinha as numero_de_carteirinha,  MAX(CASE
                             WHEN problema_de_saude.tipo = 'grave' THEN 4
                             WHEN problema_de_saude.tipo = 'medio' THEN 3
                             WHEN problema_de_saude.tipo = 'normal' THEN 2
@@ -281,64 +284,82 @@ function getMedicoIdByUsuarioId($pdo, $usuarioId)
     return null;
 }
 
-function setArquivo($pdo, $nome, $descricao, $data_emissao, $data_validade, $tipo, $status, $medico, $paciente){
-    try{
-    if (empty($data_validade)) {
-        $data_validade = $data_emissao;
-    }
+function setArquivo($pdo, $nome, $descricao, $data_emissao, $data_validade, $tipo, $status, $medico, $paciente)
+{
+    try {
+        if (empty($data_validade)) {
+            $data_validade = $data_emissao;
+        }
 
-    $sql = "INSERT INTO arquivos (nome, caminho, descricao, data_emissao, data_validade, tipo, status, fk_medico_id, fk_paciente_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $pdo->prepare($sql);
-    $sucesso = $stmt->execute([$nome, '', $descricao, $data_emissao, $data_validade, $tipo, $status, $medico, $paciente]);
-if(!$sucesso){
-    throw new Exception("Erro ao cadastrar arquivo.");
-}
-$id = $pdo->lastInsertId();
-return $id;
-
+        $sql = "INSERT INTO arquivos (nome, caminho, descricao, data_emissao, data_validade, tipo, status, fk_medico_id, fk_paciente_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $pdo->prepare($sql);
+        $sucesso = $stmt->execute([$nome, '', $descricao, $data_emissao, $data_validade, $tipo, $status, $medico, $paciente]);
+        if (!$sucesso) {
+            throw new Exception("Erro ao cadastrar arquivo.");
+        }
+        $id = $pdo->lastInsertId();
+        return $id;
     } catch (Exception $e) {
-       $_SESSION['erro'][] = "Erro ao cadastrar arquivo: " . $e->getMessage();
-       return false;
+        $_SESSION['erro'][] = "Erro ao cadastrar arquivo: " . $e->getMessage();
+        return false;
     }
 }
 
-function getinformacaoPaciente($pdo, $id){
+function getinformacaoPaciente($pdo, $id)
+{
     $sql = "SELECT usuarios.nome as nome FROM paciente INNER JOIN usuarios on paciente.fk_usuario_id = usuarios.id WHERE paciente.id = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id]);
     return $stmt->fetch();
 }
 
-function updateArquivo($pdo, $id, $caminho){
+function updateArquivo($pdo, $id, $caminho)
+{
     if (!$id || !is_numeric($id)) {
         $_SESSION['erro'][] = "ID inválido.";
         exit;
     }
-    try{
+    try {
         $sql = "UPDATE arquivos SET caminho = ? WHERE  id_arquivos = ? ";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$caminho, $id]);
-    if ($stmt->rowCount() === 0) {
-        throw new Exception("Acesso negado ou aula não encontrada.");
-    }
-    return true;
-    }catch(Exception $e){
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$caminho, $id]);
+        if ($stmt->rowCount() === 0) {
+            throw new Exception("Acesso negado ou aula não encontrada.");
+        }
+        return true;
+    } catch (Exception $e) {
         $_SESSION['erro'][] = $e->getMessage();
         return false;
     }
 }
 
-function deleteArquivo($pdo, $id){
+function deleteArquivo($pdo, $id)
+{
     try {
-         $stmt = $pdo->prepare("DELETE FROM arquivos WHERE id_arquivos = ?");
+        $stmt = $pdo->prepare("DELETE FROM arquivos WHERE id_arquivos = ?");
         $stmt->execute([$id]);
 
         if ($stmt->rowCount() === 0) {
             throw new Exception("Arquivo não encontrado.");
         }
         return true;
-    }catch (Exception $e) {
+    } catch (Exception $e) {
         $_SESSION['erro'][] = $e->getMessage();
         return false;
     }
+}
+
+function getinformacaoUsuario($pdo, $email)
+{
+    $sql = "SELECT * FROM usuarios WHERE email = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$email]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function updateUsuario($pdo, $id, $senha)
+{
+    $sql = "UPDATE usuarios SET senha=? WHERE id=?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$senha, $id]);
 }
