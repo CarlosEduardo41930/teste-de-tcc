@@ -19,7 +19,7 @@ CREATE TABLE paciente(
     fk_usuario_id int,
     alergias VARCHAR(255),
     tipo_sanguineo VARCHAR(3),
-    numero_de_carteirinha INTEGER,
+    numero_de_carteirinha VARCHAR(25),
     historico_familiar TEXT,
     data_nascimento DATE not null,
     rua VARCHAR (50) null,
@@ -69,6 +69,7 @@ CREATE TABLE problema_de_saude (
     nome VARCHAR(100),
     status VARCHAR(50),
     tipo ENUM('grave','leve','normal','medio'),
+    data DATE not null,
     fk_paciente INTEGER NOT NULL,
     fk_medico INTEGER NOT NULL
 );

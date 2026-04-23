@@ -7,9 +7,9 @@ $conn = new mysqli($host, $user, $password, $banco);
 if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
+
 $mensagens = [];
 $mensagens[] = "Conectado ao banco";
-
 
 // =============================
 // USUARIOS
@@ -34,25 +34,23 @@ VALUES
 
 $conn->query($sql);
 
-
 // =============================
-// PACIENTES
+// PACIENTES (ATUALIZADO)
 // =============================
 
 $sql = "INSERT INTO paciente
-(fk_usuario_id, data_nascimento, rua, numero_casa, bairro, cidade, altura, peso, contato_emergencia)
+(fk_usuario_id, alergias, tipo_sanguineo, numero_de_carteirinha, historico_familiar, data_nascimento, rua, numero_casa, bairro, cidade, altura, peso, contato_emergencia)
 VALUES
-(1,'1999-02-01','Av Covabra','690','Centro','Salto',1.60,65,'11981016027'),
-(2,'1998-05-10','Rua das Flores','120','Centro','Campinas',1.75,72,'11988887777'),
-(3,'2001-08-21','Av Brasil','450','Jardim','Indaiatuba',1.65,60,'11977776666'),
-(7,'1997-03-15','Rua Goiás','55','Centro','Sorocaba',1.72,70,'11981112222'),
-(8,'1996-11-21','Av Paulista','900','Bela Vista','São Paulo',1.62,58,'11983334444'),
-(9,'1995-07-18','Rua XV','100','Centro','Jundiaí',1.80,85,'11985556666'),
-(10,'2000-01-05','Av Independência','500','Centro','Ribeirão Preto',1.70,68,'11987778888')
+(1,'Nenhuma','O+','12345','Sem histórico relevante','1999-02-01','Av Covabra','690','Centro','Salto',1.60,65,'11981016027'),
+(2,'Poeira','A+','12346','Hipertensão na família','1998-05-10','Rua das Flores','120','Centro','Campinas',1.75,72,'11988887777'),
+(3,'Lactose','B+','12347','Diabetes familiar','2001-08-21','Av Brasil','450','Jardim','Indaiatuba',1.65,60,'11977776666'),
+(7,'Nenhuma','O-','12348','Sem histórico','1997-03-15','Rua Goiás','55','Centro','Sorocaba',1.72,70,'11981112222'),
+(8,'Glúten','AB+','12349','Problemas cardíacos','1996-11-21','Av Paulista','900','Bela Vista','São Paulo',1.62,58,'11983334444'),
+(9,'Nenhuma','A-','12350','Sem histórico','1995-07-18','Rua XV','100','Centro','Jundiaí',1.80,85,'11985556666'),
+(10,'Medicamento X','B-','12351','Alergias recorrentes','2000-01-05','Av Independência','500','Centro','Ribeirão Preto',1.70,68,'11987778888')
 ";
 
 $conn->query($sql);
-
 
 // =============================
 // MEDICOS
@@ -67,7 +65,6 @@ VALUES
 ";
 
 $conn->query($sql);
-
 
 // =============================
 // ARQUIVOS
@@ -85,7 +82,6 @@ VALUES
 
 $conn->query($sql);
 
-
 // =============================
 // MEDICAMENTOS
 // =============================
@@ -102,6 +98,21 @@ VALUES
 
 $conn->query($sql);
 
+// =============================
+// PROBLEMAS DE SAÚDE (NOVO)
+// =============================
+
+$sql = "INSERT INTO problema_de_saude
+(nome, status, tipo, data, fk_paciente, fk_medico)
+VALUES
+('Hipertensão','controlado','grave','2025-01-10',1,1),
+('Gripe','curado','leve','2025-02-15',2,2),
+('Diabetes','em tratamento','medio','2025-03-20',3,3),
+('Enxaqueca','recorrente','normal','2025-04-01',4,1),
+('Gastrite','tratamento','medio','2025-04-05',5,2)
+";
+
+$conn->query($sql);
 
 $mensagens[] = "Dados inseridos com sucesso.";
 

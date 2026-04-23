@@ -48,6 +48,10 @@ $conn->query($sql);
 $sql = "CREATE TABLE IF NOT EXISTS paciente(
     id INT AUTO_INCREMENT PRIMARY KEY,
     fk_usuario_id INT,
+    alergias VARCHAR(255),
+    tipo_sanguineo VARCHAR(3),
+    numero_de_carteirinha VARCHAR(25),
+    historico_familiar TEXT,
     data_nascimento DATE NOT NULL,
     rua VARCHAR(50),
     numero_casa VARCHAR(10),
@@ -116,8 +120,42 @@ $conn->query($sql);
 
 
 // =============================
+// TABELA PROBLEMA DE SAÚDE
+// =============================
+
+$sql = "CREATE TABLE IF NOT EXISTS problema_de_saude(
+    ID_problema_de_saude int not null PRIMARY KEY auto_increment,
+    nome VARCHAR(100),
+    status VARCHAR(50),
+    tipo ENUM('grave','leve','medio','normal'),
+    data DATE not null,
+    fk_paciente INTEGER NOT NULL,
+    fk_medico INTEGER NOT NULL
+)";
+
+$conn->query($sql);
+
+// =============================
 // FOREIGN KEYS
 // =============================
+
+$conn->query("
+ALTER TABLE problema_de_saude
+ADD CONSTRAINT fk_problema_paciente
+FOREIGN KEY (fk_paciente)
+REFERENCES paciente(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
+");
+
+$conn->query("
+ALTER TABLE problema_de_saude
+ADD CONSTRAINT fk_problema_medico
+FOREIGN KEY (fk_medico)
+REFERENCES medico(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
+");
 
 $conn->query("
 ALTER TABLE paciente

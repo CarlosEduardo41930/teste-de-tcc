@@ -2,36 +2,29 @@
 
 require_once "config_banco_uso.php";
 
-
 $conn = new mysqli($host, $user, $password);
 
 if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
 }
+
 $mensagens = [];
 $mensagens[] = "Conectado ao MySQL";
 
-
 // Criar banco se não existir
 $conn->query("CREATE DATABASE IF NOT EXISTS $banco");
-
 $conn->select_db($banco);
-
 
 // =============================
 // APAGAR TODAS AS TABELAS
 // =============================
-
 $conn->query("SET FOREIGN_KEY_CHECKS = 0");
 
 $result = $conn->query("SHOW TABLES");
 
 while ($row = $result->fetch_array()) {
-
     $tabela = $row[0];
-
     $conn->query("DROP TABLE $tabela");
-
     $mensagens[] = "Tabela removida: $tabela";
 }
 
@@ -39,11 +32,9 @@ $conn->query("SET FOREIGN_KEY_CHECKS = 1");
 
 $mensagens[] = "Todas as tabelas foram apagadas.";
 
-
 // =============================
 // CRIAR TABELAS NOVAMENTE
 // =============================
-
 
 // usuarios
 $conn->query("CREATE TABLE usuarios(
@@ -54,14 +45,17 @@ $conn->query("CREATE TABLE usuarios(
     cpf VARCHAR(15) NOT NULL,
     senha VARCHAR(255) NOT NULL,
     nivel ENUM('paciente','medico') DEFAULT 'paciente',
-    telefone numeric(11)
+    telefone NUMERIC(11) NOT NULL
 )");
 
-
-// paciente
+// paciente (ATUALIZADO)
 $conn->query("CREATE TABLE paciente(
     id INT AUTO_INCREMENT PRIMARY KEY,
     fk_usuario_id INT,
+    alergias VARCHAR(255),
+    tipo_sanguineo VARCHAR(3),
+    numero_de_carteirinha VARCHAR(25),
+    historico_familiar TEXT,
     data_nascimento DATE NOT NULL,
     rua VARCHAR(50),
     numero_casa VARCHAR(10),
@@ -69,9 +63,8 @@ $conn->query("CREATE TABLE paciente(
     cidade VARCHAR(30),
     altura FLOAT,
     peso FLOAT,
-    contato_emergencia VARCHAR(11)
+    contato_emergencia NUMERIC(11)
 )");
-
 
 // medico
 $conn->query("CREATE TABLE medico(
@@ -80,7 +73,6 @@ $conn->query("CREATE TABLE medico(
     crm VARCHAR(13) NOT NULL,
     especialidade VARCHAR(50) NOT NULL
 )");
-
 
 // arquivos
 $conn->query("CREATE TABLE arquivos(
@@ -97,13 +89,12 @@ $conn->query("CREATE TABLE arquivos(
     fk_medico_id INT
 )");
 
-
 // medicamentos
 $conn->query("CREATE TABLE medicamento_em_uso(
     id_medicamento INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    dosagem VARCHAR (20) NOT NULL,
-    frequencia VARCHAR (20) NOT NULL,
+    dosagem VARCHAR(20) NOT NULL,
+    frequencia VARCHAR(20) NOT NULL,
     data_inicio DATE NOT NULL,
     data_fim DATE,
     observacao VARCHAR(50),
@@ -111,11 +102,22 @@ $conn->query("CREATE TABLE medicamento_em_uso(
     fk_paciente_id INT NOT NULL
 )");
 
+// NOVA TABELA: problema_de_saude
+$conn->query("CREATE TABLE problema_de_saude(
+    id_problema_de_saude INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100),
+    status VARCHAR(50),
+    tipo ENUM('grave','leve','normal','medio'),
+    data DATE NOT NULL,
+    fk_paciente INT NOT NULL,
+    fk_medico INT NOT NULL
+)");
 
 // =============================
 // FOREIGN KEYS
 // =============================
 
+// paciente -> usuarios
 $conn->query("ALTER TABLE paciente
 ADD CONSTRAINT fk_paciente_usuario
 FOREIGN KEY (fk_usuario_id)
@@ -123,6 +125,7 @@ REFERENCES usuarios(id)
 ON DELETE CASCADE
 ON UPDATE CASCADE");
 
+// medico -> usuarios
 $conn->query("ALTER TABLE medico
 ADD CONSTRAINT fk_medico_usuario
 FOREIGN KEY (fk_usuario_id)
@@ -130,6 +133,7 @@ REFERENCES usuarios(id)
 ON DELETE CASCADE
 ON UPDATE CASCADE");
 
+// arquivos
 $conn->query("ALTER TABLE arquivos
 ADD CONSTRAINT fk_arquivos_paciente
 FOREIGN KEY (fk_paciente_id)
@@ -144,6 +148,7 @@ REFERENCES medico(id)
 ON DELETE CASCADE
 ON UPDATE CASCADE");
 
+// medicamentos
 $conn->query("ALTER TABLE medicamento_em_uso
 ADD CONSTRAINT fk_medicamento_paciente
 FOREIGN KEY (fk_paciente_id)
@@ -158,6 +163,20 @@ REFERENCES medico(id)
 ON DELETE CASCADE
 ON UPDATE CASCADE");
 
+// problema_de_saude
+$conn->query("ALTER TABLE problema_de_saude
+ADD CONSTRAINT fk_problema_paciente
+FOREIGN KEY (fk_paciente)
+REFERENCES paciente(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE");
+
+$conn->query("ALTER TABLE problema_de_saude
+ADD CONSTRAINT fk_problema_medico
+FOREIGN KEY (fk_medico)
+REFERENCES medico(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE");
 
 $mensagens[] = "Tabelas recriadas com sucesso.";
 
