@@ -95,3 +95,26 @@ function mensagemSucesso()
         unset($_SESSION['sucesso']);
     }
 }
+
+function showRepositorio(){
+    $id = $_SESSION['id_usuario'];
+    $tipo = $_GET['tipo'];
+    $mansagem = $_GET['mansagem'];
+    $dado = repositorio($id, $tipo);
+
+    foreach ($dado as $receita) {
+        echo "<div class='card'>
+      <div class='card-name'> " . htmlspecialchars($receita['nome'], ENT_QUOTES, 'UTF-8') . "</div>
+      <div class='card-meta'>
+        <div class='card-date-label'>Data emissão:</div>
+        <div class='card-date-value'>" . htmlspecialchars(traduz_data_para_exibir($receita['data']), ENT_QUOTES, 'UTF-8') . "</div>
+        <div class='card-desc-label'>Descrição:</div>
+      </div>
+      <a href='arquivo.php?arquivo=" . htmlspecialchars($receita['id'], ENT_QUOTES, 'UTF-8') . "&tipo=$mansagem' alt='Botão de mostrar o documento médico'
+>
+      <button  class='card-btn'>Abrir</button>
+      </a>
+    </div>";
+    }
+
+}

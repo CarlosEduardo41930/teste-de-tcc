@@ -206,7 +206,7 @@ function getTelEmergenciaDataBase($pdo, $paciente_id)
 
 function getReceitasMedicas($pdo, $id)
 {
-    $sql = "SELECT a.id_arquivos as id, a.descricao as descricao, a.data_emissao as data, usua.nome as medico FROM arquivos a LEFT JOIN medico me ON a.fk_medico_id = me.id LEFT JOIN usuarios usua ON me.fk_usuario_id = usua.id WHERE a.fk_paciente_id = ? and a.tipo = 'receitas' ORDER BY a.data_emissao;";
+    $sql = "SELECT a.id_arquivos as id, a.descricao AS descricao, a.data_emissao as data, (SELECT u.nome FROM medico m INNER JOIN usuarios u ON m.fk_usuario_id = u.id WHERE m.id = a.fk_medico_id) AS medico FROM arquivos a WHERE a.fk_paciente_id = ( SELECT p.id FROM paciente p WHERE p.fk_usuario_id = ? ) AND a.tipo = 'receitas' ORDER BY a.data_emissao";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id]);
     return $stmt->fetchAll();
@@ -357,8 +357,8 @@ function getinformacaoUsuario($pdo, $cpf)
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$usuario) {
-    $_SESSION['erro'][] = "CPF não encontrado.";
-    return false;
+        $_SESSION['erro'][] = "CPF não encontrado.";
+        return false;
     }
     return $usuario;
 }
@@ -369,17 +369,25 @@ function updateUsuario($pdo, $id, $senha)
         $_SESSION['erro'][] = "ID inválido.";
         exit;
     }
-    try{
-    $sql = "UPDATE usuarios SET senha=? WHERE id=?";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$senha, $id]);
-    if ($stmt->rowCount() > 0) {
-        return true;
-    } else {
-        throw new Exception('Usuário não encontrado ou senha igual.');
-    }
-    }catch(Exception $e){
+    try {
+        $sql = "UPDATE usuarios SET senha=? WHERE id=?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$senha, $id]);
+        if ($stmt->rowCount() > 0) {
+            return true;
+        } else {
+            throw new Exception('Usuário não encontrado ou senha igual.');
+        }
+    } catch (Exception $e) {
         $_SESSION['erro'][] = "Erro ao atualizar senha: " . $e->getMessage();
         return false;
     }
+}
+
+function getRepositorio($pdo, $id, $tipo)
+{
+    $sql = "SELECT a.id_arquivos as id, a.nome AS nome, a.data_emissao as data FROM arquivos a WHERE a.fk_paciente_id = ( SELECT p.id FROM paciente p WHERE p.fk_usuario_id = ? ) AND a.tipo = ? ORDER BY a.data_emissao;";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$id, $tipo]);
+    return $stmt->fetchAll();
 }

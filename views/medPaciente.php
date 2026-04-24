@@ -14,5 +14,6 @@ verificarTipo(['medico']);
 </head>
 <body>
     <a href="adicionarDocumento.php">Adicionar Documento</a>
+    <a href="repositorio.php?tipo=receitas&mansagem=receita">receita</a>
 </body>
 </html>

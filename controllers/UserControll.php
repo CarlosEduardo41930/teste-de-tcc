@@ -326,3 +326,8 @@ function mudarSenha(){
     
 
 }
+
+function repositorio($id, $tipo){
+    global $pdo;
+    return getRepositorio($pdo, $id, $tipo);
+}
