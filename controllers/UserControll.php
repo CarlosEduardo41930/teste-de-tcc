@@ -9,6 +9,7 @@ require __DIR__ . "/../models/UserModel.php";
 require __DIR__ . '/../config/conexao.php';
 require __DIR__ . '/security.php';
 require_once __DIR__ . '/../servico/chamados/guardar_arquivo.php';
+require_once __DIR__ . '/../servico/chamados/enviar_email.php';
 
 // function verificarConexao(){
 
@@ -307,4 +308,21 @@ function uploadArquivoI()
         header('Location: ../views/adicionarDocumento.php');
         exit();
     }
+}
+
+function mudarSenha(){
+    global $pdo;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $cpf = trim($_POST['cpf']);
+    $usuario = getinformacaoUsuario($pdo, $cpf);
+    $novaSenha = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+    $hash = password_hash($novaSenha, PASSWORD_DEFAULT);
+    $resultado = updateUsuario($pdo, $usuario['id'], $hash);
+    if ($resultado === true) {
+        $_SESSION['sucesso'] = "Um email de recuperação de senha foi enviado para o seu endereço de email cadastrado.";
+    }
+    enviarEmail($usuario['email'], $novaSenha);
+    }
+    
+
 }

@@ -23,9 +23,9 @@ function showMedicamento(){
     }
 }
 
+
 function mensagemErro()
 {
-    global $pdo;
     if (!empty($_SESSION['erro'])) {
         echo "<ul>";
 
@@ -70,6 +70,7 @@ function arquivoIframe(){
 }
 
 
+
 // function showPacienteMedicos(){
 //     $_SESSION['id_paciente'] = '';
 //     $dado = pacienteMedicos();
@@ -87,3 +88,10 @@ function arquivoIframe(){
 // }
 
 
+function mensagemSucesso()
+{
+    if (!empty($_SESSION['sucesso'])) {
+        echo "<p>" . htmlspecialchars($_SESSION['sucesso'], ENT_QUOTES, 'UTF-8') . "</p>";
+        unset($_SESSION['sucesso']);
+    }
+}

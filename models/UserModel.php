@@ -349,17 +349,37 @@ function deleteArquivo($pdo, $id)
     }
 }
 
-function getinformacaoUsuario($pdo, $email)
+function getinformacaoUsuario($pdo, $cpf)
 {
-    $sql = "SELECT * FROM usuarios WHERE email = ?";
+    $sql = "SELECT id, email FROM usuarios WHERE cpf = ?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$email]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->execute([$cpf]);
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$usuario) {
+    $_SESSION['erro'][] = "CPF não encontrado.";
+    return false;
+    }
+    return $usuario;
 }
 
 function updateUsuario($pdo, $id, $senha)
 {
+    if (!$id || !is_numeric($id)) {
+        $_SESSION['erro'][] = "ID inválido.";
+        exit;
+    }
+    try{
     $sql = "UPDATE usuarios SET senha=? WHERE id=?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$senha, $id]);
+    if ($stmt->rowCount() > 0) {
+        return true;
+    } else {
+        throw new Exception('Usuário não encontrado ou senha igual.');
+    }
+    }catch(Exception $e){
+        $_SESSION['erro'][] = "Erro ao atualizar senha: " . $e->getMessage();
+        return false;
+    }
 }
