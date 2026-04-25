@@ -386,7 +386,7 @@ function updateUsuario($pdo, $id, $senha)
 
 function getRepositorio($pdo, $id, $tipo)
 {
-    $sql = "SELECT a.id_arquivos as id, a.nome AS nome, a.data_emissao as data FROM arquivos a WHERE a.fk_paciente_id = ( SELECT p.id FROM paciente p WHERE p.fk_usuario_id = ? ) AND a.tipo = ? ORDER BY a.data_emissao;";
+    $sql = "SELECT a.id_arquivos as id, a.nome AS nome, a.descricao AS descricao, a.data_emissao as data FROM arquivos a WHERE a.fk_paciente_id = ? AND a.tipo = ? ORDER BY a.data_emissao";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id, $tipo]);
     return $stmt->fetchAll();

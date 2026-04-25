@@ -97,24 +97,32 @@ function mensagemSucesso()
 }
 
 function showRepositorio(){
-    $id = $_SESSION['id_usuario'];
-    $tipo = $_GET['tipo'];
-    $mansagem = $_GET['mansagem'];
+    $id = $_SESSION['id_paciente'] ?? '';
+    $tipo = $_GET['tipo'] ?? '';
+    $mensagem = $_GET['mensagem'] ?? '';
+
+    if (empty($id) || empty($tipo)) {
+        $_SESSION['erro'][] = "Parâmetros inválidos para mostrar repositório.";
+        return;
+    }
+
     $dado = repositorio($id, $tipo);
 
-    foreach ($dado as $receita) {
+    if (empty($dado)) {
+        echo "<p>Nenhum documento encontrado.</p>";
+        return;
+    }
+
+    foreach ($dado as $item) {
         echo "<div class='card'>
-      <div class='card-name'> " . htmlspecialchars($receita['nome'], ENT_QUOTES, 'UTF-8') . "</div>
+      <div class='card-name'> " . htmlspecialchars($item['nome'], ENT_QUOTES, 'UTF-8') . "</div>
       <div class='card-meta'>
         <div class='card-date-label'>Data emissão:</div>
-        <div class='card-date-value'>" . htmlspecialchars(traduz_data_para_exibir($receita['data']), ENT_QUOTES, 'UTF-8') . "</div>
-        <div class='card-desc-label'>Descrição:</div>
+        <div class='card-date-value'>" . htmlspecialchars(traduz_data_para_exibir($item['data']), ENT_QUOTES, 'UTF-8') . "</div>
       </div>
-      <a href='arquivo.php?arquivo=" . htmlspecialchars($receita['id'], ENT_QUOTES, 'UTF-8') . "&tipo=$mansagem' alt='Botão de mostrar o documento médico'
->
+      <a href='arquivo.php?arquivo=" . htmlspecialchars($item['id'], ENT_QUOTES, 'UTF-8') . "&tipo=$mensagem' alt='Botão de mostrar o documento médico'>
       <button  class='card-btn'>Abrir</button>
       </a>
     </div>";
     }
-
 }
