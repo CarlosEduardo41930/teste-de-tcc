@@ -46,6 +46,7 @@ verificarTipo(['paciente','medico']);
           <th>Medicamento</th>
           <th>Dose</th>
           <th>Frequência</th>
+          <th>Ações</th>
         </tr>
       </thead>
       <tbody>

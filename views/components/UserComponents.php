@@ -22,6 +22,7 @@ $tipo = $_SESSION['nivel'];
             "nome" => "Não tem medicamento",
             "dosagem" => "--------",
             "frequencia" => "--------"
+            
         ]];
     }
 
@@ -30,7 +31,11 @@ $tipo = $_SESSION['nivel'];
         <td>" . htmlspecialchars($remedio['nome'], ENT_QUOTES, 'UTF-8') . "</td>
         <td>" . htmlspecialchars($remedio['dosagem'], ENT_QUOTES, 'UTF-8') . "</td>
          <td>" . htmlspecialchars($remedio['frequencia'], ENT_QUOTES, 'UTF-8') . "</td>
+         <td> <a href='informacao.php?medicamento" . htmlspecialchars($remedio['id'], ENT_QUOTES, 'UTF-8') . ">detalhes</a><a href='../deletMedicamento.php?medicamento" . htmlspecialchars($remedio['id'], ENT_QUOTES, 'UTF-8') . ">deletar</a>
          </tr>";
+    }
+    if($tipo === 'medico'){
+       echo " <a href='formMedicamento.php'>Adicionar novo medicamento</a>";
     }
 }
 
