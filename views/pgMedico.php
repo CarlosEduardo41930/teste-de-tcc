@@ -4,8 +4,6 @@ require_once './components/UserComponents.php';
 verificarTipo(['medico']);
 informacaoMedica();
 echo $_SESSION['id_usuario'];
-echo $_SESSION['id_medico'];
-echo $_SESSION['nome_medico'];
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">

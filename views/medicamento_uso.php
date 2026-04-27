@@ -1,7 +1,7 @@
 <?php
 require_once '../controllers/UserControll.php';
 require_once './components/UserComponents.php';
-verificarTipo(['paciente']);
+verificarTipo(['paciente','medico']);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">

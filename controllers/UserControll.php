@@ -122,10 +122,18 @@ function validateUser()
     }
 }
 
-function medicamento($id)
+function medicamento($id, $tipo)
 {
     global $pdo;
-    return getMedicamentoPaciente($pdo, $id);
+    if($tipo === 'paciente'){
+        return getMedicamentoPaciente($pdo, $id);
+    }elseif ($tipo === 'medico') {
+        return getMedicamentoMedico($pdo, $id);
+    }
+    else {
+        $_SESSION['erro'][] = "usuário não encontrado";
+    }
+    
 }
 
 

@@ -168,7 +168,7 @@ function validar($pdo, $senha, $cpf)
 
 function getMedicamentoPaciente($pdo, $idPaciente)
 {
-    $sql = "SELECT nome, dosagem, frequencia FROM medicamento_em_uso WHERE fk_paciente_id = ?";
+    $sql = "SELECT medicamento_em_uso.nome, medicamento_em_uso.dosagem, medicamento_em_uso.frequencia FROM medicamento_em_uso LEFT JOIN paciente on paciente.id = medicamento_em_uso.fk_paciente_id LEFT JOIN usuarios on paciente.fk_usuario_id=usuarios.id WHERE usuarios.id = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$idPaciente]);
     return $stmt->fetchAll();
@@ -389,5 +389,13 @@ function getRepositorio($pdo, $id, $tipo)
     $sql = "SELECT a.id_arquivos as id, a.nome AS nome, a.descricao AS descricao, a.data_emissao as data FROM arquivos a WHERE a.fk_paciente_id = ? AND a.tipo = ? ORDER BY a.data_emissao";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id, $tipo]);
+    return $stmt->fetchAll();
+}
+
+function getMedicamentoMedico($pdo, $idPaciente)
+{
+    $sql = "SELECT nome, dosagem, frequencia FROM medicamento_em_uso WHERE fk_paciente_id = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$idPaciente]);
     return $stmt->fetchAll();
 }

@@ -3,8 +3,19 @@
 
 function showMedicamento(){
 
+if ($_SESSION['nivel'] === 'paciente') {
     $id = $_SESSION['id_usuario'];
-    $dado = medicamento($id);
+     
+} elseif ($_SESSION['nivel'] === 'medico') {
+    $id = $_SESSION['id_paciente'];
+} {
+    $_SESSION['erro'][] = "usuário não encontrado";
+}
+
+$tipo = $_SESSION['nivel'];
+
+    $id = $_SESSION['id_usuario'];
+    $dado = medicamento($id, $tipo);
 
     if (empty($dado)) {
         $dado = [[
