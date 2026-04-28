@@ -177,7 +177,7 @@ function arquivo()
     // Segurança
     if (!$arquivo || !file_exists($arquivo)) {
         http_response_code(404);
-        die("Arquivo não encontrado.");
+        $_SESSION['erro'][] = "Arquivo não encontrado.";
     }
 
     // Cabeçalhos corretos para exibir no navegador

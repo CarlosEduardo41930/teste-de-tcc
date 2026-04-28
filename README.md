@@ -10,7 +10,7 @@ models:
 componentes:
 -mensagemSucesso()
 -showRepositorio()
--
+
 
 
 getReceitasMedicas($pdo, $id) foi alterada 
@@ -22,4 +22,4 @@ pagina medicamento uso.php
 pagina busca.php e pgMedico.php foi alterada
 
 
-busca falta estilo para médio o sintomas e a teg <a>
+busca() falta estilo para médio o sintomas e a teg <a>
