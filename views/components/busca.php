@@ -5,28 +5,25 @@ $item = $_GET['termo'] ?? null;
 $id = $_GET['medico'] ?? null;
 if($item && !empty($item)){
     $dado = buscarPaciente($item);
-foreach ($dado as $paciente) {
-    echo "<a href='medPaciente.php?paciente=" . htmlspecialchars($paciente['id'], ENT_QUOTES, 'UTF-8') . "'>
-        <div>
-        <p>" . htmlspecialchars($paciente['nome'], ENT_QUOTES, 'UTF-8') . "</p>
-        <p>" . htmlspecialchars(traduz_data_para_exibir($paciente['data_nascimento']), ENT_QUOTES, 'UTF-8') . "</p>
-        <p>" . htmlspecialchars($paciente['tipo'], ENT_QUOTES, 'UTF-8') . "</p>
-        <p>" . htmlspecialchars($paciente['numero_de_carteirinha'], ENT_QUOTES, 'UTF-8') . "</p>
-        </div> 
-        </a>";
-};
-}elseif($id){
-        
+}else{
     $dado = pacienteMedicos($id);
-    foreach ($dado as $paciente){
-        echo "<a href='medPaciente.php?paciente=" . htmlspecialchars($paciente['id'], ENT_QUOTES, 'UTF-8') . "'>
-        <div>
-        <p>" . htmlspecialchars($paciente['nome'], ENT_QUOTES, 'UTF-8') . "</p>
-        <p>" . htmlspecialchars(traduz_data_para_exibir($paciente['data_nascimento']), ENT_QUOTES, 'UTF-8') . "</p>
-        <p>" . htmlspecialchars($paciente['tipo'], ENT_QUOTES, 'UTF-8') . "</p>
-        <p>" . htmlspecialchars($paciente['numero_de_carteirinha'], ENT_QUOTES, 'UTF-8') . "</p>
-        </div> 
-        </a>";
-    }
 }
-
+foreach ($dado as $paciente){
+    $valor = htmlspecialchars($paciente['tipo'], ENT_QUOTES, 'UTF-8');
+    $tipo = [
+         1 => 'leve',
+         2 => 'normal',
+         3 => 'medio',
+         4 => 'grave'
+    ];
+        echo "
+    <div class='card $tipo[$valor]'>
+        <h1 class='card-name'>". htmlspecialchars($paciente['nome'], ENT_QUOTES, 'UTF-8') . "</h1>
+        <div class='card-body'>
+          <p><strong>Data nascimento:</strong>" . htmlspecialchars(traduz_data_para_exibir($paciente['data_nascimento']), ENT_QUOTES, 'UTF-8') . "</p>
+          <p class='card-severity'>Estado de saúde: " . $tipo[$valor] . "</p>
+          <p class='card-severity'>Cartão de saúde: " . htmlspecialchars($paciente['numero_de_carteirinha'], ENT_QUOTES, 'UTF-8') . "</p>
+        </div>
+      </div>";
+    }
+?>

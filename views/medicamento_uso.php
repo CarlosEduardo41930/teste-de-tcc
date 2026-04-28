@@ -53,6 +53,9 @@ verificarTipo(['paciente','medico']);
         <?php showMedicamento();?>
       </tbody>
     </table>
+    <?php if($_SESSION['nivel'] === 'medico'){
+       echo " <a href='formMedicamento.php'>Adicionar novo medicamento</a>";
+    } ?>
 
     <!-- Bottom row -->
     <div class="bottom-row">

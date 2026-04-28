@@ -25,17 +25,18 @@ $tipo = $_SESSION['nivel'];
             
         ]];
     }
+    $delete = '';
 
     foreach ($dado as $remedio) {
+        if($tipo === 'medico'){
+            $delete= "<a href='../deletMedicamento.php?medicamento" . htmlspecialchars($remedio['id'], ENT_QUOTES, 'UTF-8') . "'>deletar</a>";
+        }
         echo "<tr>
         <td>" . htmlspecialchars($remedio['nome'], ENT_QUOTES, 'UTF-8') . "</td>
         <td>" . htmlspecialchars($remedio['dosagem'], ENT_QUOTES, 'UTF-8') . "</td>
          <td>" . htmlspecialchars($remedio['frequencia'], ENT_QUOTES, 'UTF-8') . "</td>
-         <td> <a href='informacao.php?medicamento" . htmlspecialchars($remedio['id'], ENT_QUOTES, 'UTF-8') . ">detalhes</a><a href='../deletMedicamento.php?medicamento" . htmlspecialchars($remedio['id'], ENT_QUOTES, 'UTF-8') . ">deletar</a>
+         <td> <a href='informacao.php?medicamento" . htmlspecialchars($remedio['id'], ENT_QUOTES, 'UTF-8') . "'>detalhes</a> ". $delete . "
          </tr>";
-    }
-    if($tipo === 'medico'){
-       echo " <a href='formMedicamento.php'>Adicionar novo medicamento</a>";
     }
 }
 
