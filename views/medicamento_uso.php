@@ -95,7 +95,7 @@ verificarTipo(['paciente','medico']);
 
 
   <script>
-function confirmarExclusao(id) {
+function confirmarExclusao(id, tipo) {
     Swal.fire({
         title: 'Tem certeza?',
         text: "Você não poderá reverter isso!",
@@ -108,7 +108,7 @@ function confirmarExclusao(id) {
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = `deletar.php?id=${id}`;
+            window.location.href = `../tool/deletMedicamento.php?id=${id}&tipo=${tipo}`;
         }
     });
 }

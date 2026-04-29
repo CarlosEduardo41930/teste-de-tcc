@@ -399,3 +399,8 @@ function getMedicamentoMedico($pdo, $idPaciente)
     $stmt->execute([$idPaciente]);
     return $stmt->fetchAll();
 }
+
+function deletePorId($pdo, $tipo, $id){
+    
+
+}
