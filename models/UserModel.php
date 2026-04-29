@@ -227,16 +227,16 @@ DADOSPACIENTE.data_nascimento,
 DADOSPACIENTE.tipo,
 DADOSPACIENTE.numero_de_carteirinha,
 DADOSPACIENTE.id
-FROM medico INNER JOIN usuarios on medico.fk_usuario_id = usuarios.id
-            INNER JOIN (SELECT problema_de_saude.fk_medico, usuarios.nome, paciente.data_nascimento, paciente.id, paciente.numero_de_carteirinha,
+FROM medico LEFT JOIN usuarios on medico.fk_usuario_id = usuarios.id
+            LEFT JOIN (SELECT problema_de_saude.fk_medico, usuarios.nome, paciente.data_nascimento, paciente.id, paciente.numero_de_carteirinha,
                         MAX(CASE
                             WHEN problema_de_saude.tipo = 'grave' THEN 4
                             WHEN problema_de_saude.tipo = 'medio' THEN 3
                             WHEN problema_de_saude.tipo = 'normal' THEN 2
                             WHEN problema_de_saude.tipo = 'leve' THEN 1
                             END) as tipo
-                        FROM usuarios INNER JOIN paciente on usuarios.id = paciente.fk_usuario_id
-                                      INNER JOIN problema_de_saude on paciente.id = problema_de_saude.fk_paciente
+                        FROM usuarios LEFT JOIN paciente on usuarios.id = paciente.fk_usuario_id
+                                      LEFT JOIN problema_de_saude on paciente.id = problema_de_saude.fk_paciente
                         GROUP BY problema_de_saude.fk_medico, usuarios.nome, paciente.data_nascimento, paciente.numero_de_carteirinha,paciente.id) as DADOSPACIENTE
                         on DADOSPACIENTE.fk_medico = medico.id
 WHERE usuarios.id = ?
@@ -400,7 +400,22 @@ function getMedicamentoMedico($pdo, $idPaciente)
     return $stmt->fetchAll();
 }
 
-function deletePorId($pdo, $tipo, $id){
-    
+// function deletePorId($pdo, $tipo, $link, $id){
+//     if (!$tipo || !is_numeric($id)) {
+//         $_SESSION['erro'][] = "ID inválido.";
+//         return false;
+//     }
+//     try {
+//         $stmt = $pdo->prepare("DELETE FROM ? WHERE id_arquivos = ?");
+//         $stmt->execute([$id]);
 
-}
+//         if ($stmt->rowCount() === 0) {
+//             throw new Exception("Arquivo não encontrado.");
+//         }
+//         return true;
+//     } catch (Exception $e) {
+//         $_SESSION['erro'][] = $e->getMessage();
+//         return false;
+//     }
+
+// }

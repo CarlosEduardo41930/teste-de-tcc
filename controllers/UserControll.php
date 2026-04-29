@@ -340,12 +340,14 @@ function repositorio($id, $tipo){
     return getRepositorio($pdo, $id, $tipo);
 }
 
-function excluirPorId($id, $nivel){
-    global $pdo;
+// function excluirPorId($id,$tipo,$nivel){
+//     global $pdo;
 
-    if ($nivel !== 'medico'){
-        //$_SESSION['erro'][] = "Nivel não permitido.";
-        return false;
-    }
+//     if ($nivel !== 'medico'){
+//         //$_SESSION['erro'][] = "Nivel não permitido.";
+//         return false;
+//     }
+//     deletePorId($pdo, $tipo, $id);
 
-}
+
+// }
