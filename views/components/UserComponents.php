@@ -29,7 +29,9 @@ $tipo = $_SESSION['nivel'];
 
     foreach ($dado as $remedio) {
         if($tipo === 'medico'){
-            $delete= "<a href='../deletMedicamento.php?medicamento" . htmlspecialchars($remedio['id'], ENT_QUOTES, 'UTF-8') . "'>deletar</a>";
+            $delete= "<button class='btn-icon-delete' onclick='confirmarExclusao(" . htmlspecialchars($remedio['id'], ENT_QUOTES, 'UTF-8') . ")' title='Excluir registro'>
+    <i class='fa-solid fa-trash-can'></i>
+</button>";
         }
         echo "<tr>
         <td>" . htmlspecialchars($remedio['nome'], ENT_QUOTES, 'UTF-8') . "</td>

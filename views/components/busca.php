@@ -16,7 +16,7 @@ foreach ($dado as $paciente){
          3 => 'medio',
          4 => 'grave'
     ];
-        echo "
+        echo "<a href='medPaciente.php?paciente=" . htmlspecialchars($paciente['id'], ENT_QUOTES, 'UTF-8') . "'>
     <div class='card $tipo[$valor]'>
         <h1 class='card-name'>". htmlspecialchars($paciente['nome'], ENT_QUOTES, 'UTF-8') . "</h1>
         <div class='card-body'>
@@ -24,6 +24,7 @@ foreach ($dado as $paciente){
           <p class='card-severity'>Estado de saúde: " . $tipo[$valor] . "</p>
           <p class='card-severity'>Cartão de saúde: " . htmlspecialchars($paciente['numero_de_carteirinha'], ENT_QUOTES, 'UTF-8') . "</p>
         </div>
-      </div>";
+      </div>
+      </a>";
     }
 ?>
