@@ -400,22 +400,22 @@ function getMedicamentoMedico($pdo, $idPaciente)
     return $stmt->fetchAll();
 }
 
-// function deletePorId($pdo, $tipo, $link, $id){
-//     if (!$tipo || !is_numeric($id)) {
-//         $_SESSION['erro'][] = "ID inválido.";
-//         return false;
-//     }
-//     try {
-//         $stmt = $pdo->prepare("DELETE FROM ? WHERE id_arquivos = ?");
-//         $stmt->execute([$id]);
+function deletePorId($pdo, $id){
+    if (!is_numeric($id)) {
+        $_SESSION['erro'][] = "ID inválido.";
+        return false;
+    }
+    try {
+        $stmt = $pdo->prepare("DELETE FROM medicamento_em_uso WHERE id_medicamento = ?");
+        $stmt->execute([$id]);
 
-//         if ($stmt->rowCount() === 0) {
-//             throw new Exception("Arquivo não encontrado.");
-//         }
-//         return true;
-//     } catch (Exception $e) {
-//         $_SESSION['erro'][] = $e->getMessage();
-//         return false;
-//     }
+        if ($stmt->rowCount() === 0) {
+            throw new Exception("Arquivo não encontrado.");
+        }
+        return true;
+    } catch (Exception $e) {
+        $_SESSION['erro'][] = $e->getMessage();
+        return false;
+    }
 
-// }
+}

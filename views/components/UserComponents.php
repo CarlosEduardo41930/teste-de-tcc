@@ -13,8 +13,6 @@ if ($_SESSION['nivel'] === 'paciente') {
 }
 
 $tipo = $_SESSION['nivel'];
-
-    $id = $_SESSION['id_usuario'];
     $dado = medicamento($id, $tipo);
 
     if (empty($dado)) {
@@ -29,7 +27,7 @@ $tipo = $_SESSION['nivel'];
 
     foreach ($dado as $remedio) {
         if($tipo === 'medico'){
-            $delete= "<button class='btn-icon-delete' onclick='confirmarExclusao(" . htmlspecialchars($remedio['id'], ENT_QUOTES, 'UTF-8') . ", 'medicanento')' title='Excluir registro'>
+            $delete= "<button class='btn-icon-delete' onclick='confirmarExclusao(" . htmlspecialchars($remedio['id'], ENT_QUOTES, 'UTF-8') . ")' title='Excluir registro'>
     <i class='fa-solid fa-trash-can'></i>
 </button>";
         }

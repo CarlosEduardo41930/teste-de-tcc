@@ -340,14 +340,21 @@ function repositorio($id, $tipo){
     return getRepositorio($pdo, $id, $tipo);
 }
 
-// function excluirPorId($id,$tipo,$nivel){
-//     global $pdo;
+function excluirPorId(){
+    global $pdo;
+    $id = $_GET['id'] ?? '';
+    $nivel = $_SESSION['nivel'] ?? '';
 
-//     if ($nivel !== 'medico'){
-//         //$_SESSION['erro'][] = "Nivel não permitido.";
-//         return false;
-//     }
-//     deletePorId($pdo, $tipo, $id);
+    if ($nivel !== 'medico'){
+        $_SESSION['erro'][] = "Nivel não permitido.";
+        return false;
+    }
+    $dado = deletePorId($pdo, $id);
+
+    if($dado){
+        header("Location: ../views/medicamento_uso.php");
+        exit();
+    }
 
 
-// }
+}
