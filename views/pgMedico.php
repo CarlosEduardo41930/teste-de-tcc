@@ -13,7 +13,7 @@ echo $_SESSION['id_usuario'];
   <title>Selecione um Paciente</title>
   <link rel="icon" type="image/svg+xml" href="https://i.postimg.cc/xkk98Qgh/Med-Pass-Icon.png" alt="Med-Pass-Icon" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-<link rel="stylesheet" href="./styles/medPaciente.css">
+<link rel="stylesheet" href="./styles/medico.css">
 </head>
 <body>
     <br><br>

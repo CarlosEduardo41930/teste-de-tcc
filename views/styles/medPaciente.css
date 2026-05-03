@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
 
 * {
   margin: 0;
@@ -32,7 +31,7 @@ body {
 /* ── HEADER ── */
 .topbar {
   background: var(--teal);
-  padding: 2px 878px;
+  padding: 2px 78px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -95,153 +94,180 @@ body {
   color: var(--teal);
 }
 
-/* ── MAIN CONTENT ── */
+/* ── MAIN ── */
 main {
   width: 100%;
-  max-width: 740px;
-  padding: 28px 20px 40px;
-}
-
-/* ── SEARCH BAR ── */
-.search-wrapper {
+  max-width: 860px;
+  padding: 60px 40px 160px;
   display: flex;
-  align-items: center;
-  background: var(--white);
-  border: 2px solid var(--teal);
-  border-radius: 30px;
-  padding: 8px 16px;
-  margin-bottom: 28px;
-  gap: 10px;
-}
-
-.search-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  font-family: 'Nunito', sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-dark);
-  background: transparent;
-}
-
-.clear-btn {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: #888;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  transition: background 0.2s;
+  align-items: center;
+  flex: 1;
 }
-
-.clear-btn:hover { background: #555; }
-
-.clear-btn svg {
-  width: 13px;
-  height: 13px;
-  stroke: var(--white);
-  stroke-width: 2.5;
-  fill: none;
-}
-
-/* ── PATIENT GRID ── */
-.grid {
+/* ── ACTION GRID ── */
+.action-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  width: 100%;
+  max-width: 620px;
 }
-
-/* ── PATIENT CARD ── */
-.card {
-  border-radius: 14px;
-  overflow: hidden;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: transform 0.18s, box-shadow 0.18s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-}
-
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.16);
-}
-
-/* Severity colours */
-.card.grave  { border-color: var(--red); }
-.card.leve   { border-color: var(--green); }
-.card.sem    { border-color: var(--teal); }
-
-.card-name {
-  padding: 14px 12px;
-  font-weight: 800;
-  font-size: 15px;
-  text-align: center;
-  color: var(--text-dark);
-  border-bottom: 2px solid transparent;
-}
-
-.card.grave .card-name  { border-bottom-color: var(--red); }
-.card.leve  .card-name  { border-bottom-color: var(--green); }
-.card.sem   .card-name  { border-bottom-color: var(--teal); }
-
-.card-body {
-  padding: 12px 14px 14px;
-  font-size: 13.5px;
-  font-weight: 600;
-  color: var(--white);
-  line-height: 1.5;
-}
-
-.card.grave .card-body  { background: var(--red); }
-.card.leve  .card-body  { background: var(--green); }
-.card.sem   .card-body  { background: var(--teal); }
-
-.card-body strong { font-weight: 800; }
-
-.card-severity {
-  margin-top: 6px;
-  font-weight: 800;
-  font-size: 14px;
-}
-
-/* ── ADD CARD ── */
-.card-add {
-  border-radius: 14px;
-  border: 2.5px dashed var(--teal);
+ 
+/* ── ACTION CARD (dashed) ── */
+.action-card {
   background: var(--white);
+  border: 2.5px dashed var(--teal);
+  border-radius: 18px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  min-height: 130px;
+  gap: 16px;
+  padding: 48px 24px;
   transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
 }
-
-.card-add:hover {
+ 
+.action-card:hover {
   background: var(--teal-light);
-  transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(26,143,133,0.15);
 }
-
-.add-icon {
-  font-size: 38px;
-  color: var(--teal);
+ 
+.action-plus {
+  font-size: 52px;
   font-weight: 300;
+  color: var(--teal);
   line-height: 1;
 }
-
-.add-label {
-  font-size: 14px;
+ 
+.action-label {
+  font-size: 16px;
   font-weight: 800;
   color: var(--teal);
   text-align: center;
-  line-height: 1.3;
+  line-height: 1.35;
+}
+ 
+/* ── PATIENT BADGE (bottom-right) ── */
+.patient-badge {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  background: var(--red);
+  color: var(--white);
+  padding: 20px 28px;
+  border-top-left-radius: 18px;
+  min-width: 260px;
+  max-width: 340px;
+  box-shadow: -4px -4px 20px rgba(0,0,0,0.18);
+}
+ 
+.badge-label {
+  font-size: 15px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+ 
+.badge-name {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+ 
+.badge-severity {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.action-card {
+  text-decoration: none;
+}
+
+#sidebar {
+    position: fixed;
+    top: 15vh;
+    right: -0; /* responsivo */
+    width: 25vw;
+    height: calc(100vh - 15vh);
+    background: #007977;
+    padding: 5px;
+    transition: transform 0.3s ease;
+
+    transform: translateX(100%); /* escondido */
+    
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    box-shadow: -4px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Quando aberto */
+#sidebar.active {
+    transform: translateX(0); /* aparece */
+}
+
+#sidebar a {
+    display: block;
+    text-decoration: none;
+    margin: 15px 0;
+    font-size: 18px;
+}
+
+#sidebar h1, h3 {
+    color: #007977;
+}
+
+.contSidebar {
+    width: 100%;
+    min-height: 10vh;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.config {
+    color: black;
+}
+
+.opcao {
+    color: white;
+}
+
+/* menu hamburger */
+
+.menu-icon {
+    width: 35px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.menu-icon span {
+    display: block;
+    height: 4px;
+    background: white;
+    margin: 6px 0;
+    border-radius: 2px;
+}
+
+/* Hover */
+.menu-icon:hover span {
+    background: #ccc;
+}
+
+#sidebar {
+  z-index: 100;
+  /* resto do código que já tem... */
+}
+
+.patient-badge {
+  z-index: 10;
 }

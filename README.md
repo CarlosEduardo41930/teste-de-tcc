@@ -23,3 +23,9 @@ pagina busca.php e pgMedico.php foi alterada
 
 
 busca() falta estilo para médio o sintomas e a teg <a>
+
+
+{
+    criar_novo: o js que tinha não funciona, estilização não ta bom
+    paciente: faltou o medio
+}

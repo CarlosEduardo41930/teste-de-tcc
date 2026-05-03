@@ -132,14 +132,39 @@ function showRepositorio(){
 
     foreach ($dado as $item) {
         echo "<div class='card'>
-      <div class='card-name'> " . htmlspecialchars($item['nome'], ENT_QUOTES, 'UTF-8') . "</div>
-      <div class='card-meta'>
-        <div class='card-date-label'>Data emissão:</div>
-        <div class='card-date-value'>" . htmlspecialchars(traduz_data_para_exibir($item['data']), ENT_QUOTES, 'UTF-8') . "</div>
-      </div>
-      <a href='arquivo.php?arquivo=" . htmlspecialchars($item['id'], ENT_QUOTES, 'UTF-8') . "&tipo=$mensagem' alt='Botão de mostrar o documento médico'>
-      <button  class='card-btn'>Abrir</button>
-      </a>
-    </div>";
+  <div class='card-meta'>
+    <div class='card-row'>
+      <span class='card-date-label'>Nome:</span>
+      <span class='card-date-value'>" . htmlspecialchars($item['nome'], ENT_QUOTES, 'UTF-8') . "</span>
+    </div>
+    <div class='card-row'>
+      <span class='card-desc-label'>Data emissão:</span>
+      <span class='card-desc-value'>" . htmlspecialchars(traduz_data_para_exibir($item['data']), ENT_QUOTES, 'UTF-8') . "</span>
+    </div>
+  </div>
+  <a href='arquivo.php?arquivo=" . htmlspecialchars($item['id'], ENT_QUOTES, 'UTF-8') . "&tipo=$mensagem' alt='Botão de mostrar o documento médico'> 
+  <button class='card-btn'>Abrir</button>
+  </a>
+</div>";
     }
 }
+
+
+
+
+//   <div class='card'>
+//   <div class='card-meta'>
+//     <div class='card-row'>
+//       <span class='card-date-label'>Nome:</span>
+//       <span class='card-date-value'>" . htmlspecialchars($item['nome'], ENT_QUOTES, 'UTF-8') . "</span>
+//     </div>
+//     <div class='card-row'>
+//       <span class='card-desc-label'>Data emissão:</span>
+//       <span class='card-desc-value'>" . htmlspecialchars(traduz_data_para_exibir($item['data']), ENT_QUOTES, 'UTF-8') . "</span>
+//     </div>
+//   </div>
+//   <a href='arquivo.php?arquivo=" . htmlspecialchars($item['id'], ENT_QUOTES, 'UTF-8') . "&tipo=$mensagem' alt='Botão de mostrar o documento médico'> 
+//   <button class='card-btn'>Abrir</button>
+//   </a>
+// </div>
+ 

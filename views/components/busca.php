@@ -16,15 +16,13 @@ foreach ($dado as $paciente){
          3 => 'medio',
          4 => 'grave'
     ];
-        echo "<a href='medPaciente.php?paciente=" . htmlspecialchars($paciente['id'], ENT_QUOTES, 'UTF-8') . "'>
-    <div class='card $tipo[$valor]'>
-        <h1 class='card-name'>". htmlspecialchars($paciente['nome'], ENT_QUOTES, 'UTF-8') . "</h1>
-        <div class='card-body'>
-          <p><strong>Data nascimento:</strong>" . htmlspecialchars(traduz_data_para_exibir($paciente['data_nascimento']), ENT_QUOTES, 'UTF-8') . "</p>
-          <p class='card-severity'>Estado de saúde: " . $tipo[$valor] . "</p>
-          <p class='card-severity'>Cartão de saúde: " . htmlspecialchars($paciente['numero_de_carteirinha'], ENT_QUOTES, 'UTF-8') . "</p>
-        </div>
+        echo " <a class='card " . $tipo[$valor] . "' href='medPaciente.php?paciente=" . htmlspecialchars($paciente['id'], ENT_QUOTES, 'UTF-8') . "'>
+      <h1 class='card-name'>". htmlspecialchars($paciente['nome'], ENT_QUOTES, 'UTF-8') . "</h1>
+      <div class='card-body'>
+        <p><strong>Data nascimento:</strong> " . htmlspecialchars(traduz_data_para_exibir($paciente['data_nascimento']), ENT_QUOTES, 'UTF-8') . "</p>
+        <p class='card-severity'>" . $tipo[$valor] . "</p>
+        <p class='card-severity'>Cartão de saúde: " . htmlspecialchars($paciente['numero_de_carteirinha'], ENT_QUOTES, 'UTF-8') . "</p>
       </div>
-      </a>";
+    </a>";
     }
 ?>
