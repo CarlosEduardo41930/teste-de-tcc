@@ -419,3 +419,19 @@ function deletePorId($pdo, $id){
     }
 
 }
+
+function  setMedicamentoUso($pdo, $nome, $dosagem, $frequencia,$dataInicio, $dataFim, $observacao, $medicoId, $pacienteId){
+    if (!is_numeric($medicoId) || !is_numeric($pacienteId)) {
+        $_SESSION['erro'][] = "ID inválido.";
+        return false;
+    }
+    try{
+        $sql = "INSERT INTO medicamento_em_uso (nome, dosagem, frequencia, data_inicio, data_fim, observacao, fk_medico_id, fk_paciente_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$nome, $dosagem, $frequencia, $dataInicio, $dataFim, $observacao, $medicoId, $pacienteId]);
+        return true;
+    } catch (Exception $e) {
+        $_SESSION['erro'][] = "Erro ao cadastrar medicamento em uso: " . $e->getMessage();
+        return false;
+    }
+}

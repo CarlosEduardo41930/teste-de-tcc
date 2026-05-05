@@ -358,3 +358,28 @@ function excluirPorId(){
 
 
 }
+function MedicamentoUso(){
+    global $pdo;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $nome = sanitizar($_POST['nome'] ?? '', 'nome');
+        $dosagem = trim($_POST['dosagem'] ?? '');
+        $dataInicio = trim($_POST['dataInicio'] ?? '');
+        $dataFim = trim($_POST['dataFim'] ?? '');
+        $observacao = sanitizar($_POST['observacao'] ?? '', 'texto');
+        $frequencia = trim($_POST['frequencia'] ?? '');
+        $pacienteId =($_SESSION['id_paciente'] ?? 0);
+        $medicoId = ($_SESSION['id_medico'] ?? 0);
+
+        if (!$pacienteId || !$medicoId) {
+            $_SESSION['erro'][] = "Sessão inválida. Faça login novamente.";
+            return;
+        }
+
+        if ($nome === '' || $dosagem === '' || $frequencia === '') {
+            $_SESSION['erro'][] = "Preencha todos os campos obrigatórios.";
+            return;
+        }
+
+        setMedicamentoUso($pdo, $nome, $dosagem, $frequencia,$dataInicio, $dataFim, $observacao, $medicoId, $pacienteId);
+    }
+}

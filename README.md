@@ -2,11 +2,13 @@ função nem todas estão sendo chamadas e nem o javascript
 controllers:
 - mudarSenha()
 -repositorio($id, $tipo)
+-MedicamentoUso()
 models:
 -getinformacaoUsuario($pdo, $cpf)
 -updateUsuario($pdo, $id, $senha)
 -getRepositorio($pdo, $id, $tipo)
 -getMedicamentoMedico($pdo, $idPaciente)
+- setMedicamentoUso($pdo, $nome, $dosagem, $frequencia,$dataInicio, $dataFim, $observacao, $medicoId, $pacienteId)
 componentes:
 -mensagemSucesso()
 -showRepositorio()
