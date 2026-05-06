@@ -8,6 +8,7 @@
 
 :root {
   --teal: #1a8f85;
+  --teal-card: #c97310;
   --teal-dark: #146f67;
   --teal-light: #e8f5f4;
   --red: #c0392b;
@@ -201,7 +202,7 @@ main {
 
 .card.grave .card-body  { background: var(--red); }
 .card.leve  .card-body  { background: var(--green); }
-.card.sem   .card-body  { background: var(--teal); }
+.card.sem   .card-body  { background: var(--teal-card); }
 
 .card-body strong { font-weight: 800; }
 

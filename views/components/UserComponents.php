@@ -178,3 +178,10 @@ function showInformacaoMedicamentoUso(){
         return;
     }
 }
+function showProblemaSaude(){
+    $id = $_SESSION['id_paciente'] ?? '';
+    $dado = mostrarProblemaSaude($id);
+
+    foreach ($dado as $problema) {
+    }
+}
