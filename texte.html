@@ -1,14 +1,167 @@
+--- texte_acessibilidade.html (原始)
+
+
++++ texte_acessibilidade.html (修改后)
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MedPass – Prontuários</title>
+  <title>MedPass – Prontuários (Com Acessibilidade)</title>
   <link rel="icon" type="image/svg+xml" href="https://i.postimg.cc/xkk98Qgh/Med-Pass-Icon.png" alt="Med-Pass-Icon" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="./teste.css"/>
+
+  <style>
+    /* ========================================
+       ESTILOS PARA OS BOTÕES DE ACESSIBILIDADE
+       (Não alteram o CSS original)
+       ======================================== */
+
+    .accessibility-panel {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
+
+    .access-btn {
+      background: var(--teal);
+      color: var(--white);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.2s, background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .access-btn:hover {
+      transform: scale(1.1);
+      background: var(--teal-dark);
+    }
+
+    .access-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Tooltip explicativo */
+    .access-btn::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 60px;
+      background: var(--text);
+      color: var(--white);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .access-btn:hover::after {
+      opacity: 1;
+    }
+
+    /* ========================================
+       CLASSES PARA MUDANÇA DE TEMA
+       (Adicionadas via JavaScript)
+       ======================================== */
+
+    /* Tema escuro */
+    body.dark-theme {
+      --gray-100: #1a1a2e;
+      --gray-200: #16213e;
+      --text: #eaeaea;
+      --white: #0f3460;
+    }
+
+    body.dark-theme .subheader {
+      background: var(--gray-200);
+      border-bottom-color: var(--gray-400);
+    }
+
+    body.dark-theme .card-btn {
+      color: var(--white);
+    }
+
+    body.dark-theme .card-btn:hover {
+      background: var(--teal-dark);
+    }
+
+    /* Tema de alto contraste */
+    body.high-contrast {
+      --teal: #000000;
+      --teal-dark: #333333;
+      --teal-light: #ffffff;
+      --teal-mid: #000000;
+      --white: #ffffff;
+      --gray-100: #ffffff;
+      --gray-200: #000000;
+      --gray-400: #000000;
+      --gray-600: #000000;
+      --text: #000000;
+      --red: #cc0000;
+    }
+
+    body.high-contrast .card-btn {
+      color: #000000;
+      border: 2px solid #000000;
+    }
+
+    /* ========================================
+       CONTROLE DE TAMANHO DA FONTE
+       ======================================== */
+
+    body.font-large {
+      font-size: 18px;
+    }
+
+    body.font-xlarge {
+      font-size: 20px;
+    }
+
+    /* Ajustes para fontes maiores */
+    body.font-large .card,
+    body.font-xlarge .card {
+      padding: 28px 28px 24px;
+    }
+
+    body.font-large .topbar,
+    body.font-xlarge .topbar {
+      padding: 4px 50px;
+    }
+
+    body.font-large .subheader,
+    body.font-xlarge .subheader {
+      padding: 20px 40px;
+    }
+  </style>
 </head>
 <body>
+
+<!-- PANEL DE ACESSIBILIDADE -->
+<div class="accessibility-panel">
+  <button class="access-btn" data-tooltip="Aumentar fonte" onclick="increaseFontSize()">
+    <i class="fa-solid fa-font"></i>
+  </button>
+  <button class="access-btn" data-tooltip="Mudar tema" onclick="toggleTheme()">
+    <i class="fa-solid fa-palette"></i>
+  </button>
+  <button class="access-btn" data-tooltip="Alto contraste" onclick="toggleHighContrast()">
+    <i class="fa-solid fa-circle-half-stroke"></i>
+  </button>
+</div>
 
 <!-- TOP BAR -->
   <div class="topbar">
@@ -125,9 +278,94 @@
     <div class="badge-severity">Comorbidade grave</div>
   </div>
 
-  </div>  
+  </div>
 
 </div>
 </main>
+
+<script>
+  // ============================================
+  // SCRIPT PARA CONTROLE DE ACESSIBILIDADE
+  // ============================================
+
+  let currentFontSize = 0; // 0 = normal, 1 = grande, 2 = extra grande
+  let currentTheme = 0; // 0 = normal, 1 = escuro
+  let highContrastActive = false;
+
+  // Função para aumentar o tamanho da fonte
+  function increaseFontSize() {
+    const body = document.body;
+    currentFontSize = (currentFontSize + 1) % 3; // Cicla entre 0, 1, 2
+
+    // Remove todas as classes de fonte
+    body.classList.remove('font-large', 'font-xlarge');
+
+    // Adiciona a classe apropriada
+    if (currentFontSize === 1) {
+      body.classList.add('font-large');
+    } else if (currentFontSize === 2) {
+      body.classList.add('font-xlarge');
+    }
+
+    // Salva preferência no localStorage
+    localStorage.setItem('fontSize', currentFontSize);
+  }
+
+  // Função para alternar tema (claro/escuro)
+  function toggleTheme() {
+    const body = document.body;
+    currentTheme = currentTheme === 0 ? 1 : 0;
+
+    if (currentTheme === 1) {
+      body.classList.add('dark-theme');
+    } else {
+      body.classList.remove('dark-theme');
+    }
+
+    // Salva preferência no localStorage
+    localStorage.setItem('theme', currentTheme);
+  }
+
+  // Função para ativar/desativar alto contraste
+  function toggleHighContrast() {
+    const body = document.body;
+    highContrastActive = !highContrastActive;
+
+    if (highContrastActive) {
+      body.classList.add('high-contrast');
+    } else {
+      body.classList.remove('high-contrast');
+    }
+
+    // Salva preferência no localStorage
+    localStorage.setItem('highContrast', highContrastActive);
+  }
+
+  // Carregar preferências salvas ao iniciar a página
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedFontSize = localStorage.getItem('fontSize');
+    const savedTheme = localStorage.getItem('theme');
+    const savedHighContrast = localStorage.getItem('highContrast');
+
+    if (savedFontSize !== null) {
+      currentFontSize = parseInt(savedFontSize);
+      if (currentFontSize === 1) {
+        document.body.classList.add('font-large');
+      } else if (currentFontSize === 2) {
+        document.body.classList.add('font-xlarge');
+      }
+    }
+
+    if (savedTheme === '1') {
+      currentTheme = 1;
+      document.body.classList.add('dark-theme');
+    }
+
+    if (savedHighContrast === 'true') {
+      highContrastActive = true;
+      document.body.classList.add('high-contrast');
+    }
+  });
+</script>
 </body>
 </html>

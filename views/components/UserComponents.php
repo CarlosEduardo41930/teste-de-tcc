@@ -168,3 +168,13 @@ function showRepositorio(){
 //   </a>
 // </div>
  
+
+function showInformacaoMedicamentoUso(){
+    $id = $_GET['medicamento'] ?? '';
+    $dado = mostrarMedicamentoUso($id);
+
+    if($dado === false){
+        $_SESSION['erro'][] = "Informação do medicamento não encontrada.";
+        return;
+    }
+}

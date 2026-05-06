@@ -230,9 +230,8 @@ DADOSPACIENTE.id
 FROM medico LEFT JOIN usuarios on medico.fk_usuario_id = usuarios.id
             LEFT JOIN (SELECT problema_de_saude.fk_medico, usuarios.nome, paciente.data_nascimento, paciente.id, paciente.numero_de_carteirinha,
                         MAX(CASE
-                            WHEN problema_de_saude.tipo = 'grave' THEN 4
-                            WHEN problema_de_saude.tipo = 'medio' THEN 3
-                            WHEN problema_de_saude.tipo = 'normal' THEN 2
+                            WHEN problema_de_saude.tipo = 'grave' THEN 3
+                            WHEN problema_de_saude.tipo = 'medio' THEN 2
                             WHEN problema_de_saude.tipo = 'leve' THEN 1
                             END) as tipo
                         FROM usuarios LEFT JOIN paciente on usuarios.id = paciente.fk_usuario_id
@@ -250,9 +249,8 @@ function getBusca($pdo, $item)
 {
     $pesquisa = "%$item%";
     $sql = "SELECT paciente.id as id, usuarios.nome as nome, paciente.data_nascimento as data_nascimento, paciente.numero_de_carteirinha as numero_de_carteirinha,  MAX(CASE
-                            WHEN problema_de_saude.tipo = 'grave' THEN 4
-                            WHEN problema_de_saude.tipo = 'medio' THEN 3
-                            WHEN problema_de_saude.tipo = 'normal' THEN 2
+                            WHEN problema_de_saude.tipo = 'grave' THEN 3
+                            WHEN problema_de_saude.tipo = 'medio' THEN 2
                             WHEN problema_de_saude.tipo = 'leve' THEN 1
                             END) as tipo
 FROM paciente INNER JOIN usuarios on paciente.fk_usuario_id = usuarios.id
@@ -434,4 +432,12 @@ function  setMedicamentoUso($pdo, $nome, $dosagem, $frequencia,$dataInicio, $dat
         $_SESSION['erro'][] = "Erro ao cadastrar medicamento em uso: " . $e->getMessage();
         return false;
     }
+}
+
+function getInformacaoMedicamentoUso($pdo, $id)
+{
+    $sql = "SELECT nome, dosagem, frequencia, data_inicio, data_fim, observacao FROM medicamento_em_uso WHERE id_medicamento = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$id]);
+    return $stmt->fetch();
 }

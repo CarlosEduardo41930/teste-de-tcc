@@ -242,7 +242,7 @@ function uploadArquivoI()
     }
 
     try {
-        $nome = sanitizar($_POST['nome'] ?? '', 'nome');
+        $nome = sanitizar($_POST['nome'] ?? '', 'texto');
         $descricao = sanitizar($_POST['descricao'] ?? '', 'texto');
         $data_emissao = trim($_POST['data_emissao'] ?? '');
         $data_validade = trim($_POST['data_validade'] ?? '');
@@ -361,7 +361,7 @@ function excluirPorId(){
 function MedicamentoUso(){
     global $pdo;
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $nome = sanitizar($_POST['nome'] ?? '', 'nome');
+        $nome = sanitizar($_POST['nome'] ?? '', 'texto');
         $dosagem = trim($_POST['dosagem'] ?? '');
         $dataInicio = trim($_POST['dataInicio'] ?? '');
         $dataFim = trim($_POST['dataFim'] ?? '');
@@ -382,4 +382,12 @@ function MedicamentoUso(){
 
         setMedicamentoUso($pdo, $nome, $dosagem, $frequencia,$dataInicio, $dataFim, $observacao, $medicoId, $pacienteId);
     }
+}
+function mostrarMedicamentoUso($id){
+    global $pdo;
+    if (!is_numeric($id)) {
+        $_SESSION['erro'][] = "ID inválido.";
+        return false;
+    }
+    return getInformacaoMedicamentoUso($pdo, $id);
 }
