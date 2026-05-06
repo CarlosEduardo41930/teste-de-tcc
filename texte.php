@@ -1,17 +1,19 @@
 <?php
 function validarCPF($cpf) {
     // Remove tudo que não for número
+    try{
     $cpf = preg_replace('/[^0-9]/', '', $cpf);
 
     // Verifica se tem 11 dígitos
     if (strlen($cpf) != 11) {
-        return false;
+        throw new Exception("CPF deve conter 11 dígitos");
     }
 
     // Elimina CPFs inválidos (todos iguais)
     if (preg_match('/(\d)\1{10}/', $cpf)) {
-        return false;
+        throw new Exception("CPF inválido");
     }
+    
 
     // Primeiro dígito verificador
     $soma = 0;
@@ -41,14 +43,16 @@ function validarCPF($cpf) {
     if ($cpf[9] == $dig1 && $cpf[10] == $dig2) {
         return true;
     } else {
-        return false;
+        throw new Exception("CPF inválido");
+    }
+    }catch(Exception $e){
+        $_SESSION['erro'][]= "Erro ao cadastrar: " . $e->getMessage();
     }
 }
 
-$dado = "111.111.111-01";
-echo var_dump(validarCPF($dado));
-if (validarCPF($dado)) {
+$dado = validarCPF("972.044.238-79");
+if ($dado) {
     echo "CPF válido";
 } else {
-    echo "CPF inválido";
+    echo $_SESSION['erro'];
 }

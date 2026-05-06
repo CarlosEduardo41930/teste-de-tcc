@@ -1,7 +1,3 @@
---- texte_acessibilidade.html (原始)
-
-
-+++ texte_acessibilidade.html (修改后)
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -24,7 +20,7 @@
       left: 20px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       z-index: 1000;
     }
 
@@ -33,44 +29,80 @@
       color: var(--white);
       border: none;
       border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 20px;
+      width: 54px;
+      height: 54px;
+      font-size: 22px;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      transition: transform 0.2s, background 0.2s;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
 
     .access-btn:hover {
-      transform: scale(1.1);
+      transform: translateY(-3px) scale(1.08);
       background: var(--teal-dark);
+      box-shadow: 0 6px 20px rgba(26, 122, 110, 0.4);
     }
 
     .access-btn:active {
       transform: scale(0.95);
     }
 
+    .access-btn.active {
+      background: var(--teal-dark);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Badge indicadora de nível */
+    .access-btn .level-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--red);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--white);
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.3s ease;
+    }
+
+    .access-btn.show-badge .level-badge {
+      opacity: 1;
+      transform: scale(1);
+    }
+
     /* Tooltip explicativo */
     .access-btn::after {
       content: attr(data-tooltip);
       position: absolute;
-      left: 60px;
+      left: 64px;
       background: var(--text);
       color: var(--white);
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 12px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
       white-space: nowrap;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.2s;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
     .access-btn:hover::after {
       opacity: 1;
+      left: 68px;
     }
 
     /* ========================================
@@ -99,6 +131,30 @@
       background: var(--teal-dark);
     }
 
+    /* Tema azul suave */
+    body.theme-blue {
+      --teal: #2563eb;
+      --teal-dark: #1d4ed8;
+      --teal-light: #dbeafe;
+      --teal-mid: #3b82f6;
+    }
+
+    /* Tema roxo */
+    body.theme-purple {
+      --teal: #7c3aed;
+      --teal-dark: #5b21b6;
+      --teal-light: #ede9fe;
+      --teal-mid: #8b5cf6;
+    }
+
+    /* Tema verde */
+    body.theme-green {
+      --teal: #059669;
+      --teal-dark: #047857;
+      --teal-light: #d1fae5;
+      --teal-mid: #10b981;
+    }
+
     /* Tema de alto contraste */
     body.high-contrast {
       --teal: #000000;
@@ -123,28 +179,72 @@
        CONTROLE DE TAMANHO DA FONTE
        ======================================== */
 
-    body.font-large {
-      font-size: 18px;
+    body.font-level-1 { font-size: 18px !important; }
+    body.font-level-2 { font-size: 20px !important; }
+    body.font-level-3 { font-size: 23px !important; }
+    body.font-level-4 { font-size: 26px !important; }
+    body.font-level-5 { font-size: 30px !important; }
+
+    /* Transição suave para mudanças de fonte */
+    body {
+      transition: font-size 0.3s ease;
     }
 
-    body.font-xlarge {
-      font-size: 20px;
+    /* Forçar herança de fonte em todos os elementos */
+    body.font-level-1 *,
+    body.font-level-2 *,
+    body.font-level-3 *,
+    body.font-level-4 *,
+    body.font-level-5 * {
+      font-size: inherit !important;
     }
 
     /* Ajustes para fontes maiores */
-    body.font-large .card,
-    body.font-xlarge .card {
-      padding: 28px 28px 24px;
+    body.font-level-1 .card,
+    body.font-level-2 .card,
+    body.font-level-3 .card,
+    body.font-level-4 .card,
+    body.font-level-5 .card {
+      padding: 26px 26px 22px;
     }
 
-    body.font-large .topbar,
-    body.font-xlarge .topbar {
-      padding: 4px 50px;
+    body.font-level-3 .card,
+    body.font-level-4 .card,
+    body.font-level-5 .card {
+      padding: 30px 30px 26px;
     }
 
-    body.font-large .subheader,
-    body.font-xlarge .subheader {
-      padding: 20px 40px;
+    body.font-level-1 .topbar,
+    body.font-level-2 .topbar {
+      padding: 3px 50px;
+    }
+
+    body.font-level-3 .topbar,
+    body.font-level-4 .topbar,
+    body.font-level-5 .topbar {
+      padding: 5px 50px;
+    }
+
+    body.font-level-1 .subheader,
+    body.font-level-2 .subheader {
+      padding: 18px 40px;
+    }
+
+    body.font-level-3 .subheader,
+    body.font-level-4 .subheader,
+    body.font-level-5 .subheader {
+      padding: 22px 40px;
+    }
+
+    /* Animação de pulso ao clicar */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    .access-btn.pulse {
+      animation: pulse 0.3s ease;
     }
   </style>
 </head>
@@ -152,13 +252,14 @@
 
 <!-- PANEL DE ACESSIBILIDADE -->
 <div class="accessibility-panel">
-  <button class="access-btn" data-tooltip="Aumentar fonte" onclick="increaseFontSize()">
+  <button class="access-btn" id="btn-font" data-tooltip="Aumentar fonte (Nível 0)" onclick="increaseFontSize()">
     <i class="fa-solid fa-font"></i>
+    <span class="level-badge">0</span>
   </button>
-  <button class="access-btn" data-tooltip="Mudar tema" onclick="toggleTheme()">
+  <button class="access-btn" id="btn-theme" data-tooltip="Mudar cor do site" onclick="cycleTheme()">
     <i class="fa-solid fa-palette"></i>
   </button>
-  <button class="access-btn" data-tooltip="Alto contraste" onclick="toggleHighContrast()">
+  <button class="access-btn" id="btn-contrast" data-tooltip="Alto contraste" onclick="toggleHighContrast()">
     <i class="fa-solid fa-circle-half-stroke"></i>
   </button>
 </div>
@@ -288,54 +389,121 @@
   // SCRIPT PARA CONTROLE DE ACESSIBILIDADE
   // ============================================
 
-  let currentFontSize = 0; // 0 = normal, 1 = grande, 2 = extra grande
-  let currentTheme = 0; // 0 = normal, 1 = escuro
+  // Níveis de fonte: 0 (normal) até 5 (máximo)
+  let currentFontSize = 0;
+
+  // Temas disponíveis: default, dark, blue, purple, green
+  const themes = ['default', 'dark', 'blue', 'purple', 'green'];
+  let currentThemeIndex = 0;
+
   let highContrastActive = false;
 
   // Função para aumentar o tamanho da fonte
   function increaseFontSize() {
     const body = document.body;
-    currentFontSize = (currentFontSize + 1) % 3; // Cicla entre 0, 1, 2
+    const btnFont = document.getElementById('btn-font');
 
-    // Remove todas as classes de fonte
-    body.classList.remove('font-large', 'font-xlarge');
+    // Cicla entre 0 e 5 níveis
+    currentFontSize = (currentFontSize + 1) % 6;
 
-    // Adiciona a classe apropriada
-    if (currentFontSize === 1) {
-      body.classList.add('font-large');
-    } else if (currentFontSize === 2) {
-      body.classList.add('font-xlarge');
+    // Remove todas as classes de nível de fonte
+    body.classList.remove(
+      'font-level-1', 'font-level-2', 'font-level-3',
+      'font-level-4', 'font-level-5'
+    );
+
+    // Adiciona a classe apropriada (exceto nível 0 que é o padrão)
+    if (currentFontSize > 0) {
+      body.classList.add(`font-level-${currentFontSize}`);
     }
+
+    // Atualiza badge e tooltip
+    updateFontBadge(btnFont, currentFontSize);
+
+    // Animação de pulso
+    btnFont.classList.add('pulse');
+    setTimeout(() => btnFont.classList.remove('pulse'), 300);
 
     // Salva preferência no localStorage
     localStorage.setItem('fontSize', currentFontSize);
   }
 
-  // Função para alternar tema (claro/escuro)
-  function toggleTheme() {
-    const body = document.body;
-    currentTheme = currentTheme === 0 ? 1 : 0;
+  // Função para atualizar o badge e tooltip do botão de fonte
+  function updateFontBadge(btn, level) {
+    const badge = btn.querySelector('.level-badge');
+    badge.textContent = level;
 
-    if (currentTheme === 1) {
-      body.classList.add('dark-theme');
+    if (level > 0) {
+      btn.classList.add('show-badge');
+      btn.setAttribute('data-tooltip', `Fonte: Nível ${level} de 5`);
     } else {
+      btn.classList.remove('show-badge');
+      btn.setAttribute('data-tooltip', 'Aumentar fonte (Nível 0)');
+    }
+  }
+
+  // Função para ciclar entre os temas de cor
+  function cycleTheme() {
+    const body = document.body;
+    const btnTheme = document.getElementById('btn-theme');
+
+    // Remove o tema atual
+    if (themes[currentThemeIndex] !== 'default') {
+      body.classList.remove(`theme-${themes[currentThemeIndex]}`);
+    }
+    if (body.classList.contains('dark-theme')) {
       body.classList.remove('dark-theme');
     }
 
+    // Avança para o próximo tema
+    currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+
+    // Aplica o novo tema
+    const newTheme = themes[currentThemeIndex];
+    if (newTheme === 'dark') {
+      body.classList.add('dark-theme');
+    } else if (newTheme !== 'default') {
+      body.classList.add(`theme-${newTheme}`);
+    }
+
+    // Atualiza tooltip
+    const themeNames = {
+      'default': 'Tema Original',
+      'dark': 'Tema Escuro',
+      'blue': 'Tema Azul',
+      'purple': 'Tema Roxo',
+      'green': 'Tema Verde'
+    };
+    btnTheme.setAttribute('data-tooltip', themeNames[newTheme]);
+
+    // Animação de pulso
+    btnTheme.classList.add('pulse');
+    setTimeout(() => btnTheme.classList.remove('pulse'), 300);
+
     // Salva preferência no localStorage
-    localStorage.setItem('theme', currentTheme);
+    localStorage.setItem('themeIndex', currentThemeIndex);
   }
 
   // Função para ativar/desativar alto contraste
   function toggleHighContrast() {
     const body = document.body;
+    const btnContrast = document.getElementById('btn-contrast');
+
     highContrastActive = !highContrastActive;
 
     if (highContrastActive) {
       body.classList.add('high-contrast');
+      btnContrast.classList.add('active');
+      btnContrast.setAttribute('data-tooltip', 'Alto Contraste (Ativo)');
     } else {
       body.classList.remove('high-contrast');
+      btnContrast.classList.remove('active');
+      btnContrast.setAttribute('data-tooltip', 'Alto contraste');
     }
+
+    // Animação de pulso
+    btnContrast.classList.add('pulse');
+    setTimeout(() => btnContrast.classList.remove('pulse'), 300);
 
     // Salva preferência no localStorage
     localStorage.setItem('highContrast', highContrastActive);
@@ -344,26 +512,45 @@
   // Carregar preferências salvas ao iniciar a página
   window.addEventListener('DOMContentLoaded', () => {
     const savedFontSize = localStorage.getItem('fontSize');
-    const savedTheme = localStorage.getItem('theme');
+    const savedThemeIndex = localStorage.getItem('themeIndex');
     const savedHighContrast = localStorage.getItem('highContrast');
 
+    // Restaura tamanho da fonte
     if (savedFontSize !== null) {
       currentFontSize = parseInt(savedFontSize);
-      if (currentFontSize === 1) {
-        document.body.classList.add('font-large');
-      } else if (currentFontSize === 2) {
-        document.body.classList.add('font-xlarge');
+      if (currentFontSize > 0) {
+        document.body.classList.add(`font-level-${currentFontSize}`);
       }
+      const btnFont = document.getElementById('btn-font');
+      updateFontBadge(btnFont, currentFontSize);
     }
 
-    if (savedTheme === '1') {
-      currentTheme = 1;
-      document.body.classList.add('dark-theme');
+    // Restaura tema
+    if (savedThemeIndex !== null) {
+      currentThemeIndex = parseInt(savedThemeIndex);
+      const theme = themes[currentThemeIndex];
+      if (theme === 'dark') {
+        document.body.classList.add('dark-theme');
+      } else if (theme !== 'default') {
+        document.body.classList.add(`theme-${theme}`);
+      }
+
+      const themeNames = {
+        'default': 'Tema Original',
+        'dark': 'Tema Escuro',
+        'blue': 'Tema Azul',
+        'purple': 'Tema Roxo',
+        'green': 'Tema Verde'
+      };
+      document.getElementById('btn-theme').setAttribute('data-tooltip', themeNames[theme]);
     }
 
+    // Restaura alto contraste
     if (savedHighContrast === 'true') {
       highContrastActive = true;
       document.body.classList.add('high-contrast');
+      document.getElementById('btn-contrast').classList.add('active');
+      document.getElementById('btn-contrast').setAttribute('data-tooltip', 'Alto Contraste (Ativo)');
     }
   });
 </script>

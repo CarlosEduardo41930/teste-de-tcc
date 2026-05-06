@@ -72,6 +72,7 @@ function getUser()
 
             validarSenha($senha);
             confirmarSenha($senha, $confirmar_senha);
+            validarCPF($cpf);
 
 
             if (empty($_SESSION['erro'])) {
@@ -96,6 +97,7 @@ function getUser()
 
             validarSenha($senha);
             confirmarSenha($senha, $confirmar_senha);
+            validarCPF($cpf);
 
             if (empty($_SESSION['erro'])) {
                 setMedico($pdo, $nome, $email, $senha, $confirmar_senha, $cpf, $crm, $telefone, $especialidade, $genero, $nivel);
@@ -390,4 +392,13 @@ function mostrarMedicamentoUso($id){
         return false;
     }
     return getInformacaoMedicamentoUso($pdo, $id);
+}
+
+function mostrarProblemaSaude($id){
+    global $pdo;
+    if (!is_numeric($id)) {
+        $_SESSION['erro'][] = "ID inválido.";
+        return false;
+    }
+    return getProblemaSaude($pdo, $id);
 }

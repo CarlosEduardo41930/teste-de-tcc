@@ -1,10 +1,12 @@
 função nem todas estão sendo chamadas e nem o javascript
 
 controllers:
+-getUser()
 - mudarSenha()
 -repositorio($id, $tipo)
 -MedicamentoUso()
 -mostrarMedicamentoUso($id)
+-mostrarProblemaSaude($id)
 
 models:
 -getinformacaoUsuario($pdo, $cpf)
@@ -13,11 +15,15 @@ models:
 -getMedicamentoMedico($pdo, $idPaciente)
 - setMedicamentoUso($pdo, $nome, $dosagem, $frequencia,$dataInicio, $dataFim, $observacao, $medicoId, $pacienteId)
 -getInformacaoMedicamentoUso($pdo, $id)
+-getProblemaSaude($pdo, $id)
 
 componentes:
 -mensagemSucesso()
 -showRepositorio()
 -showInformacaoMedicamentoUso()
+
+security.php:
+-validarCPF($cpf)
 
 
 

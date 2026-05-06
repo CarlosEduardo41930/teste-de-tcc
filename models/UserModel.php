@@ -441,3 +441,10 @@ function getInformacaoMedicamentoUso($pdo, $id)
     $stmt->execute([$id]);
     return $stmt->fetch();
 }
+
+getProblemaSaude($pdo, $id){
+    $sql = "SELECT id_problema_de_saude, nome, status, tipo, data FROM problema_de_saude WHERE fk_paciente = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$id]);
+    return $stmt->fetchAll();
+}
